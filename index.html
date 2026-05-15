@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="OWL Social Publisher — Generador inteligente de contenido para redes sociales con IA">
+<meta name="theme-color" content="#0f2a5e">
+<title>OWL Social Publisher</title>
+
+<!-- PWA Manifest -->
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+<style>
+:root {
+  --theme-primary:#0f2a5e; --theme-accent:#e8621a; --theme-bg:#f0f4fb;
+  --theme-pale:#e8f0fb; --theme-client-text:#f9a87a; --theme-border:#dde4f0;
+  --theme-btn-text:#ffffff; --white:#ffffff; --text:#0d1f40;
+  --text-mid:#3d5478; --text-muted:#7a90b5; --success:#16a34a;
+  --radius:10px; --radius-lg:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{font-family:'Outfit',sans-serif;background:var(--theme-bg);color:var(--text);min-height:100vh;}
+
+/* HEADER */
+.hdr{background:var(--theme-primary);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--theme-accent);transition:background 0.4s,border-color 0.4s;position:sticky;top:0;z-index:100;}
+.hdr-left{display:flex;align-items:center;gap:12px;}
+.logo-slot{width:44px;height:44px;border-radius:10px;background:rgba(255,255,255,0.1);border:2px dashed rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;}
+.logo-slot span{font-size:10px;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:0.5px;text-transform:uppercase;}
+.logo-slot img{width:100%;height:100%;object-fit:cover;display:none;}
+.hdr-appname{font-size:17px;font-weight:800;color:#ffffff;letter-spacing:0.5px;line-height:1.1;}
+.hdr-appname em{color:var(--theme-accent);font-style:normal;transition:color 0.4s;}
+.hdr-negocio{font-size:10px;color:rgba(255,255,255,0.4);font-weight:400;margin-top:2px;transition:color 0.4s;}
+.hdr-negocio.activo{color:var(--theme-client-text);}
+.hdr-badge{background:var(--theme-accent);color:white;font-size:10px;font-weight:600;padding:4px 12px;border-radius:20px;white-space:nowrap;transition:background 0.4s;}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--theme-border);background:var(--white);padding:0 20px;position:sticky;top:71px;z-index:99;}
+.tab{padding:11px 16px;font-size:12px;font-weight:500;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;display:flex;align-items:center;gap:6px;user-select:none;}
+.tab.active{color:var(--theme-primary);border-bottom-color:var(--theme-accent);font-weight:600;}
+.tab:hover:not(.active){color:var(--text-mid);}
+
+.section{display:none;padding:16px 20px;max-width:980px;margin:0 auto;}.section.active{display:block;}
+.pub-grid{display:grid;grid-template-columns:290px 1fr;gap:16px;}
+
+.card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--theme-border);overflow:hidden;margin-bottom:12px;}
+.card-hdr{background:var(--theme-pale);padding:9px 14px;font-size:11px;font-weight:600;color:var(--theme-primary);text-transform:uppercase;letter-spacing:0.7px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--theme-border);transition:background 0.4s,color 0.4s;}
+.card-body{padding:12px 14px;}
+
+.upload-zone{border:2px dashed var(--theme-accent);border-radius:var(--radius);height:115px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;background:var(--theme-pale);transition:all 0.2s;position:relative;margin-bottom:10px;}
+.upload-zone:hover{opacity:0.82;}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-zone i{font-size:24px;color:var(--theme-accent);}
+.upload-text{font-size:11px;font-weight:500;color:var(--text-mid);}
+.upload-sub{font-size:10px;color:var(--text-muted);}
+.preview-img{width:100%;height:115px;object-fit:cover;border-radius:var(--radius);margin-bottom:10px;display:none;}
+
+.field{margin-bottom:10px;}
+.field label{font-size:11px;font-weight:500;color:var(--text-mid);display:block;margin-bottom:5px;}
+textarea.fi,input.fi{width:100%;border:1px solid var(--theme-border);border-radius:8px;padding:9px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);background:var(--theme-bg);outline:none;transition:border 0.2s;}
+textarea.fi{resize:none;line-height:1.6;}
+textarea.fi:focus,input.fi:focus{border-color:var(--theme-accent);background:white;}
+textarea.fi::placeholder,input.fi::placeholder{color:var(--text-muted);}
+
+.redes-wrap{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;}
+.red-chip{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:500;transition:all 0.2s;user-select:none;border:1.5px solid var(--theme-border);color:var(--text-muted);background:var(--white);}
+.red-chip input{display:none;}
+.red-chip.active{border-color:var(--theme-accent);background:var(--theme-accent);color:var(--theme-btn-text);}
+.red-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+.btn-main{width:100%;background:var(--theme-accent);color:var(--theme-btn-text);border:3px solid rgba(0,0,0,0.2);border-radius:var(--radius);padding:12px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;letter-spacing:0.4px;text-shadow:0 1px 2px rgba(0,0,0,0.25);}
+.btn-main:hover{filter:brightness(0.88);transform:translateY(-1px);}
+.btn-main:disabled{opacity:0.5;cursor:not-allowed;transform:none;filter:none;}
+
+/* CANCIONES */
+.songs-card{background:var(--white);border:1px solid var(--theme-border);border-radius:var(--radius-lg);padding:14px;margin-bottom:12px;}
+.songs-title{font-size:11px;font-weight:700;color:var(--theme-primary);text-transform:uppercase;letter-spacing:0.7px;display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.songs-sub{font-size:10px;color:var(--text-muted);margin-bottom:10px;line-height:1.5;}
+.song-item{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background:var(--theme-pale);border:1px solid var(--theme-border);margin-bottom:5px;animation:fadeUp 0.3s ease forwards;opacity:0;}
+.song-num{width:20px;height:20px;border-radius:50%;background:var(--theme-accent);color:var(--theme-btn-text);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.song-name{font-size:12px;font-weight:600;color:var(--text);}
+.song-artist{font-size:10px;color:var(--text-muted);}
+.song-vibe{font-size:10px;color:var(--theme-accent);font-weight:500;margin-left:auto;white-space:nowrap;}
+
+.empty{background:white;border:1px solid var(--theme-border);border-radius:var(--radius-lg);padding:32px 24px;text-align:center;}
+.empty-icon{font-size:28px;margin-bottom:8px;}
+.empty-title{font-size:14px;font-weight:600;color:var(--text-mid);margin-bottom:6px;}
+.empty-sub{font-size:12px;color:var(--text-muted);line-height:1.7;}
+
+.result-card{background:white;border-radius:var(--radius-lg);border:1px solid var(--theme-border);overflow:hidden;margin-bottom:12px;animation:fadeUp 0.3s ease forwards;opacity:0;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.result-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--theme-border);}
+.result-net{display:flex;align-items:center;gap:8px;}
+.net-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;}
+.net-name{font-size:12px;font-weight:600;color:var(--theme-primary);}
+.net-limit{font-size:10px;color:var(--text-muted);}
+.btn-red{display:flex;align-items:center;gap:5px;padding:6px 11px;border-radius:7px;font-family:'Outfit',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;border:1.5px solid var(--theme-border);background:var(--white);color:var(--text-muted);}
+.btn-red.ready{background:var(--theme-accent);border-color:var(--theme-accent);color:var(--theme-btn-text);border-width:2px;}
+.btn-red.copied-ok{background:var(--success);border-color:var(--success);color:white;}
+.result-body{padding:12px 14px;}
+textarea.result-ta{width:100%;border:1px solid var(--theme-border);border-radius:8px;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);resize:vertical;min-height:85px;background:var(--theme-bg);outline:none;line-height:1.6;transition:border 0.2s;}
+textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
+.result-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+.char-ok{color:var(--success);font-size:10px;}.char-warn{color:#f59e0b;font-size:10px;}.char-over{color:#dc2626;font-size:10px;}
+
+/* PERFIL */
+.perfil-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}.perfil-full{grid-column:1/-1;}
+.save-bar{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;align-items:center;}
+.btn-save{background:var(--theme-accent);color:var(--theme-btn-text);border:3px solid rgba(0,0,0,0.2);border-radius:var(--radius);padding:10px 22px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;text-shadow:0 1px 2px rgba(0,0,0,0.2);}
+.btn-save:hover{filter:brightness(0.88);}
+.saved-msg{font-size:12px;color:var(--success);font-weight:500;display:none;align-items:center;gap:5px;}
+
+.logo-upload-zone{border:2px dashed var(--theme-border);border-radius:var(--radius);height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;background:var(--theme-bg);transition:all 0.2s;position:relative;}
+.logo-upload-zone:hover{border-color:var(--theme-accent);}
+.logo-upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.logo-preview-wrap{display:none;align-items:center;gap:12px;padding:8px;background:var(--theme-bg);border-radius:var(--radius);border:1px solid var(--theme-border);}
+.logo-preview-wrap img{width:46px;height:46px;object-fit:contain;border-radius:6px;background:white;padding:3px;}
+.btn-remove-logo{font-size:10px;color:#dc2626;cursor:pointer;background:none;border:none;font-family:'Outfit',sans-serif;margin-top:3px;display:block;}
+
+.pantones-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:4px;}
+.pantone-card{border-radius:10px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all 0.2s;}
+.pantone-card.selected{border-color:var(--theme-accent);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.18);}
+.pantone-preview{height:48px;display:flex;align-items:center;justify-content:center;gap:4px;}
+.pantone-dot{width:11px;height:11px;border-radius:50%;border:1px solid rgba(255,255,255,0.35);}
+.pantone-label{font-size:10px;font-weight:500;text-align:center;padding:5px 3px;background:white;color:var(--text-mid);border-top:1px solid #eee;}
+
+/* HASHTAGS */
+.hashtag-block{background:var(--theme-pale);border:1px solid var(--theme-border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px;}
+.hashtag-block-title{font-size:11px;font-weight:600;color:var(--theme-primary);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.hashtag-block-note{font-size:10px;color:var(--text-muted);margin-bottom:10px;line-height:1.5;}
+.hashtag-inputs{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.hashtag-input{border:1px solid var(--theme-border);border-radius:7px;padding:7px 10px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);outline:none;width:100%;transition:border 0.2s;}
+.hashtag-input:focus{border-color:var(--theme-accent);}
+.hashtag-input::placeholder{color:var(--text-muted);}
+.viral-chip{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:8px;cursor:pointer;border:2px solid var(--theme-border);background:var(--white);color:var(--text-muted);transition:all 0.2s;user-select:none;grid-column:1/-1;line-height:1.4;}
+.viral-chip input{display:none;}
+.viral-chip.active{border-color:var(--theme-accent);background:var(--theme-accent);color:var(--theme-btn-text);}
+.viral-chip-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
+.viral-chip-content{display:flex;flex-direction:column;gap:3px;}
+.viral-chip-title{font-size:11px;font-weight:700;}
+.viral-chip-desc{font-size:10px;font-weight:400;opacity:0.82;line-height:1.4;}
+
+.load-card{background:white;border-radius:var(--radius-lg);border:1px solid var(--theme-border);padding:16px 14px;margin-bottom:12px;}
+.load-bar{height:6px;background:var(--theme-pale);border-radius:3px;overflow:hidden;margin-top:8px;}
+.load-fill{height:100%;background:linear-gradient(90deg,var(--theme-primary),var(--theme-accent));border-radius:3px;animation:pulse 1.2s ease-in-out infinite;}
+@keyframes pulse{0%{width:15%}50%{width:85%}100%{width:15%}}
+.api-info{background:var(--theme-pale);border:1px solid var(--theme-border);border-radius:8px;padding:10px 14px;font-size:11px;color:var(--text-mid);margin-bottom:12px;line-height:1.6;}
+.api-badge{display:inline-block;font-size:9px;padding:3px 7px;border-radius:20px;font-weight:600;}
+.api-anthropic{background:#fde8d8;color:#c4501a;}.api-gemini{background:#e8f0fb;color:#1a3a6b;}
+
+/* RESPONSIVE MÓVIL */
+@media(max-width:640px){
+  .pub-grid{grid-template-columns:1fr;}
+  .pantones-grid{grid-template-columns:repeat(5,1fr);}
+  .hdr-appname{font-size:14px;}
+  .section{padding:12px 14px;}
+  .perfil-grid{grid-template-columns:1fr;}
+  .perfil-full{grid-column:1;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="logo-slot" id="logoSlot">
+      <img id="hdrLogoImg" alt="Logo">
+      <span id="logoSlotText">Logo</span>
+    </div>
+    <div>
+      <div class="hdr-appname">OWL <em>Social Publisher</em></div>
+      <div class="hdr-negocio" id="hdrNegocio">Configura tu negocio en "Mi Negocio"</div>
+    </div>
+  </div>
+  <div class="hdr-badge">IA Activada</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="showTab('publicar')" id="tab-publicar"><i class="ti ti-send"></i> Publicar</div>
+  <div class="tab" onclick="showTab('perfil')" id="tab-perfil"><i class="ti ti-building-store"></i> Mi Negocio</div>
+  <div class="tab" onclick="showTab('config')" id="tab-config"><i class="ti ti-settings"></i> Configuración</div>
+</div>
+
+<!-- PUBLICAR -->
+<div class="section active" id="sec-publicar">
+  <div class="pub-grid">
+    <div>
+      <div class="card">
+        <div class="card-hdr"><i class="ti ti-photo"></i> Imagen</div>
+        <div class="card-body">
+          <div class="upload-zone" id="uploadZone">
+            <input type="file" accept="image/*" id="fileInput" onchange="handleFile(this)">
+            <i class="ti ti-cloud-upload"></i>
+            <div class="upload-text">Clic o arrastra tu imagen</div>
+            <div class="upload-sub">JPG, PNG, WEBP</div>
+          </div>
+          <img id="previewImg" class="preview-img" alt="Vista previa">
+          <button onclick="resetImg()" id="btnResetImg" style="display:none;width:100%;border:1px solid var(--theme-border);background:white;border-radius:7px;padding:6px;font-size:11px;color:var(--text-muted);cursor:pointer;font-family:'Outfit',sans-serif;"><i class="ti ti-refresh"></i> Cambiar imagen</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><i class="ti ti-bulb"></i> ¿Alguna idea para hoy?</div>
+        <div class="card-body">
+          <div class="field">
+            <label>Si dejas vacío, te doy ideas sobre tu negocio</label>
+            <textarea class="fi" id="contextoInput" rows="3" placeholder="Ej: nueva promoción, curso especial, logro del mes..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><i class="ti ti-share"></i> Redes sociales</div>
+        <div class="card-body">
+          <div class="redes-wrap" id="redesGrid">
+            <label class="red-chip active"><input type="checkbox" value="Facebook" checked onchange="toggleRed(this)"><div class="red-dot" style="background:#1877f2"></div> Facebook</label>
+            <label class="red-chip active"><input type="checkbox" value="Instagram" checked onchange="toggleRed(this)"><div class="red-dot" style="background:#e1306c"></div> Instagram</label>
+            <label class="red-chip active"><input type="checkbox" value="TikTok" checked onchange="toggleRed(this)"><div class="red-dot" style="background:#555"></div> TikTok</label>
+            <label class="red-chip active"><input type="checkbox" value="X" checked onchange="toggleRed(this)"><div class="red-dot" style="background:#14171a"></div> X / Twitter</label>
+            <label class="red-chip active" style="grid-column:1/-1"><input type="checkbox" value="LinkedIn" checked onchange="toggleRed(this)"><div class="red-dot" style="background:#0077b5"></div> LinkedIn</label>
+          </div>
+          <button class="btn-main" id="btnGenerar" onclick="generarTextos()">
+            <i class="ti ti-wand"></i> Generar textos con IA
+          </button>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="songs-card">
+        <div class="songs-title"><i class="ti ti-music"></i> 5 canciones recomendadas para tu publicación</div>
+        <div class="songs-sub">La IA analiza tu imagen, giro y texto para sugerirte las más pegajosas y virales del momento</div>
+        <div id="songsList"><div style="font-size:11px;color:var(--text-muted);font-style:italic;">Genera tus textos primero — las canciones aparecerán aquí</div></div>
+      </div>
+      <div id="rightPanel">
+        <div class="empty">
+          <div class="empty-icon">✦</div>
+          <div class="empty-title">Aquí aparecerán tus textos</div>
+          <div class="empty-sub">Sube una imagen, elige tus redes<br>y presiona "Generar textos con IA"<br><br><span style="color:var(--theme-accent);font-weight:500">Tip: Configura primero tu negocio<br>en "Mi Negocio"</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MI NEGOCIO -->
+<div class="section" id="sec-perfil">
+  <div class="card" style="max-width:700px">
+    <div class="card-hdr"><i class="ti ti-building-store"></i> Perfil de mi negocio</div>
+    <div class="card-body">
+      <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">Esta información se usa en cada generación. El nombre y logo aparecen automáticamente en el encabezado.</p>
+      <div class="field perfil-full" style="margin-bottom:14px;">
+        <label><i class="ti ti-photo" style="font-size:12px"></i> Logo del negocio <span style="font-size:10px;color:var(--text-muted)">(aparece en el encabezado)</span></label>
+        <div class="logo-upload-zone" id="logoUploadZone">
+          <input type="file" accept="image/*" id="logoInput" onchange="handleLogo(this)">
+          <i class="ti ti-cloud-upload" style="font-size:18px;color:var(--text-muted)"></i>
+          <span style="font-size:11px;color:var(--text-muted)">Clic para subir tu logo — PNG transparente recomendado</span>
+        </div>
+        <div class="logo-preview-wrap" id="logoPreviewWrap">
+          <img id="logoPreviewImg" alt="Logo">
+          <div>
+            <div style="font-size:11px;color:var(--text-mid);font-weight:500">Logo cargado</div>
+            <div style="font-size:10px;color:var(--text-muted)">Visible en el encabezado superior</div>
+            <button class="btn-remove-logo" onclick="removeLogo()"><i class="ti ti-trash"></i> Quitar logo</button>
+          </div>
+        </div>
+      </div>
+      <div class="field perfil-full" style="margin-bottom:16px;">
+        <label><i class="ti ti-palette" style="font-size:12px"></i> Paleta de colores</label>
+        <div class="pantones-grid" id="pantonesGrid"></div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Cambia los colores de toda la app incluyendo botones</div>
+      </div>
+      <div class="perfil-grid">
+        <div class="field perfil-full">
+          <label>Nombre del negocio * <span style="color:var(--theme-accent);font-size:10px">(aparece en el encabezado)</span></label>
+          <input class="fi" id="p-nombre" placeholder="Ej: LMM Liceo Mexicano de Micropigmentación" oninput="actualizarHeader()">
+        </div>
+        <div class="field"><label>Giro o industria *</label><input class="fi" id="p-giro" placeholder="Ej: Academia de micropigmentación"></div>
+        <div class="field"><label>Años de experiencia</label><input class="fi" id="p-anos" placeholder="Ej: 19 años en el mercado"></div>
+        <div class="field"><label>Ciudad(es) donde opera</label><input class="fi" id="p-ciudades" placeholder="Ej: Puebla, CDMX, Guadalajara"></div>
+        <div class="field perfil-full"><label>Servicios o cursos *</label><textarea class="fi" id="p-servicios" rows="3" placeholder="Ej: Cursos de microblading, micropigmentación de labios..."></textarea></div>
+        <div class="field"><label>Precios o rango <span style="font-weight:400;color:var(--text-muted)">(opcional)</span></label><input class="fi" id="p-precios" placeholder="Ej: Desde $3,500 hasta $12,000 MXN"></div>
+        <div class="field"><label>Público objetivo</label><input class="fi" id="p-publico" placeholder="Ej: Mujeres 25-45, estilistas, emprendedoras"></div>
+        <div class="field perfil-full"><label>Propuesta de valor / diferenciadores</label><textarea class="fi" id="p-valor" rows="2" placeholder="Ej: Única academia con ISO 9001, 19 años de trayectoria..."></textarea></div>
+        <div class="field perfil-full"><label>Tono de comunicación</label><textarea class="fi" id="p-tono" rows="2" placeholder="Ej: Profesional pero cercano, empoderador..."></textarea></div>
+        <div class="field"><label>Sitio web</label><input class="fi" id="p-web" placeholder="www.liceomexicano.com"></div>
+        <div class="field"><label>WhatsApp o contacto</label><input class="fi" id="p-contacto" placeholder="WhatsApp 222 123 4567"></div>
+        <div class="field perfil-full"><label>Información adicional</label><textarea class="fi" id="p-extra" rows="2" placeholder="Cualquier dato extra que la IA deba saber siempre..."></textarea></div>
+      </div>
+      <div class="hashtag-block">
+        <div class="hashtag-block-title"><i class="ti ti-hash"></i> # que no deben faltar</div>
+        <div class="hashtag-block-note">La IA seleccionará los más indicados según la red social y el tamaño del texto</div>
+        <div class="hashtag-inputs">
+          <input class="hashtag-input" id="ht-1" placeholder="#micropigmentacion" oninput="formatHash(this)">
+          <input class="hashtag-input" id="ht-2" placeholder="#microblading" oninput="formatHash(this)">
+          <input class="hashtag-input" id="ht-3" placeholder="#cursosprofesionales" oninput="formatHash(this)">
+          <input class="hashtag-input" id="ht-4" placeholder="#cejas" oninput="formatHash(this)">
+          <input class="hashtag-input" id="ht-5" placeholder="#bellezaprofesional" oninput="formatHash(this)">
+          <label class="viral-chip" id="viralChip">
+            <input type="checkbox" id="viralCheck" onchange="toggleViral(this)">
+            <i class="ti ti-trending-up viral-chip-icon"></i>
+            <div class="viral-chip-content">
+              <span class="viral-chip-title" id="viralTitle"># Virales — Recomienda # más virales</span>
+              <span class="viral-chip-desc">Si activas este botón daremos prioridad a los # más virales y no a los tuyos</span>
+            </div>
+          </label>
+        </div>
+      </div>
+      <div class="save-bar">
+        <div class="saved-msg" id="savedMsg"><i class="ti ti-circle-check"></i> Perfil guardado</div>
+        <button class="btn-save" onclick="guardarPerfil()"><i class="ti ti-device-floppy"></i> Guardar perfil</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<div class="section" id="sec-config">
+  <div class="card" style="max-width:500px">
+    <div class="card-hdr"><i class="ti ti-key"></i> API Key de IA</div>
+    <div class="card-body">
+      <div class="api-info"><strong>¿Qué es esto?</strong> La llave que conecta la app con la IA. Se configura una sola vez.<br><br>Usa <strong>Anthropic (Claude)</strong> para mejor calidad, o <strong>Google Gemini</strong> con capa gratuita.</div>
+      <div class="field">
+        <label>Proveedor de IA</label>
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;padding:8px 12px;border:1.5px solid var(--theme-border);border-radius:8px;flex:1;">
+            <input type="radio" name="proveedor" value="anthropic" onchange="cambiarProveedor(this)" checked style="accent-color:var(--theme-accent)">
+            Anthropic <span class="api-badge api-anthropic">Recomendado</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;padding:8px 12px;border:1.5px solid var(--theme-border);border-radius:8px;flex:1;">
+            <input type="radio" name="proveedor" value="gemini" onchange="cambiarProveedor(this)" style="accent-color:var(--theme-accent)">
+            Gemini <span class="api-badge api-gemini">Capa gratis</span>
+          </label>
+        </div>
+      </div>
+      <div class="field">
+        <label id="apiKeyLabel">API Key de Anthropic</label>
+        <input class="fi" type="password" id="apiKeyInput" placeholder="sk-ant-api03-...">
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <a href="https://console.anthropic.com" target="_blank" style="font-size:11px;color:var(--theme-accent);text-decoration:none;border:1px solid var(--theme-border);padding:5px 10px;border-radius:7px;display:flex;align-items:center;gap:4px;"><i class="ti ti-external-link"></i> console.anthropic.com</a>
+        <a href="https://aistudio.google.com/apikey" target="_blank" style="font-size:11px;color:var(--text-mid);text-decoration:none;border:1px solid var(--theme-border);padding:5px 10px;border-radius:7px;display:flex;align-items:center;gap:4px;"><i class="ti ti-external-link"></i> aistudio.google.com</a>
+      </div>
+      <button class="btn-save" onclick="guardarConfig()"><i class="ti ti-device-floppy"></i> Guardar configuración</button>
+      <div class="saved-msg" id="savedConfig" style="margin-top:8px;"><i class="ti ti-circle-check"></i> Configuración guardada</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const REDES={Facebook:{color:'#1877f2',url:'https://www.facebook.com',limite:63206,rec:400,emoji:true,tags:'2-3',tono:'conversacional y cercano, termina con pregunta para generar interacción'},Instagram:{color:'#e1306c',url:'https://www.instagram.com',limite:2200,rec:150,emoji:true,tags:'20-30',tono:'visual e inspirador, empieza con gancho, termina con call to action y bloque de hashtags separados'},TikTok:{color:'#555555',url:'https://www.tiktok.com',limite:2200,rec:100,emoji:true,tags:'5-8',tono:'energético, joven, directo, gancho en la primera línea'},X:{color:'#14171a',url:'https://www.x.com',limite:280,rec:250,emoji:false,tags:'1-2',tono:'conciso, impacto inmediato, sin relleno, máximo 280 caracteres'},LinkedIn:{color:'#0077b5',url:'https://www.linkedin.com',limite:3000,rec:600,emoji:false,tags:'3-5',tono:'profesional y reflexivo, aporta valor, termina con reflexión o pregunta profesional'}};
+
+const PANTONES=[
+  {id:'institucional',label:'Institucional',colors:['#0f2a5e','#e8621a','#3b6cb7','#e8f0fb'],vars:{primary:'#0f2a5e',accent:'#e8621a',bg:'#f0f4fb',pale:'#e8f0fb',clientText:'#f9a87a',border:'#dde4f0',btnText:'#ffffff'}},
+  {id:'elegante',label:'Elegante',colors:['#1a1a1a','#c9a84c','#2d2d2d','#f5f0e8'],vars:{primary:'#1a1a1a',accent:'#c9a84c',bg:'#f5f0e8',pale:'#ede8dc',clientText:'#e8d4a0',border:'#d4c9b0',btnText:'#1a1a1a'}},
+  {id:'minimalista',label:'Minimalista',colors:['#222222','#444444','#888888','#f0f0f0'],vars:{primary:'#222222',accent:'#444444',bg:'#f8f8f8',pale:'#f0f0f0',clientText:'#bbbbbb',border:'#e0e0e0',btnText:'#ffffff'}},
+  {id:'naturaleza',label:'Naturaleza',colors:['#2d5a27','#7a9e3b','#6b4226','#eaf3e0'],vars:{primary:'#2d5a27',accent:'#7a9e3b',bg:'#f0f5e8',pale:'#e2ecd6',clientText:'#c5dfa0',border:'#c8dab8',btnText:'#ffffff'}},
+  {id:'baby',label:'Baby',colors:['#c2185b','#f48fb1','#ffffff','#fce4f0'],vars:{primary:'#c2185b',accent:'#e91e8c',bg:'#fce4f0',pale:'#fce8f3',clientText:'#ffb3d9',border:'#f0c0d8',btnText:'#ffffff'}}
+];
+
+let imageBase64=null,imageType='image/jpeg',textosPorRed={},pantoneActivo='institucional';
+
+function renderPantones(){document.getElementById('pantonesGrid').innerHTML=PANTONES.map(p=>`<div class="pantone-card ${p.id===pantoneActivo?'selected':''}" onclick="aplicarPantone('${p.id}')"><div class="pantone-preview" style="background:${p.vars.primary}">${p.colors.map(c=>`<div class="pantone-dot" style="background:${c}"></div>`).join('')}</div><div class="pantone-label">${p.label}</div></div>`).join('');}
+
+function aplicarPantone(id){pantoneActivo=id;const p=PANTONES.find(x=>x.id===id);if(!p)return;const r=document.documentElement.style;r.setProperty('--theme-primary',p.vars.primary);r.setProperty('--theme-accent',p.vars.accent);r.setProperty('--theme-bg',p.vars.bg);r.setProperty('--theme-pale',p.vars.pale);r.setProperty('--theme-client-text',p.vars.clientText);r.setProperty('--theme-border',p.vars.border);r.setProperty('--theme-btn-text',p.vars.btnText);document.body.style.background=p.vars.bg;renderPantones();try{localStorage.setItem('sp_pantone',id);}catch(e){}}
+
+function showTab(t){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.getElementById('sec-'+t).classList.add('active');document.getElementById('tab-'+t).classList.add('active');}
+
+function handleFile(input){const file=input.files[0];if(!file)return;imageType=file.type||'image/jpeg';const r=new FileReader();r.onload=e=>{imageBase64=e.target.result.split(',')[1];document.getElementById('previewImg').src=e.target.result;document.getElementById('previewImg').style.display='block';document.getElementById('uploadZone').style.display='none';document.getElementById('btnResetImg').style.display='block';};r.readAsDataURL(file);}
+function resetImg(){imageBase64=null;document.getElementById('previewImg').style.display='none';document.getElementById('uploadZone').style.display='flex';document.getElementById('btnResetImg').style.display='none';document.getElementById('fileInput').value='';}
+
+function handleLogo(input){const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=e=>{const src=e.target.result;document.getElementById('logoUploadZone').style.display='none';document.getElementById('logoPreviewWrap').style.display='flex';document.getElementById('logoPreviewImg').src=src;document.getElementById('hdrLogoImg').src=src;document.getElementById('hdrLogoImg').style.display='block';document.getElementById('logoSlotText').style.display='none';try{localStorage.setItem('sp_logo',src);}catch(e){}};r.readAsDataURL(file);}
+function removeLogo(){document.getElementById('logoUploadZone').style.display='flex';document.getElementById('logoPreviewWrap').style.display='none';document.getElementById('hdrLogoImg').style.display='none';document.getElementById('logoSlotText').style.display='block';document.getElementById('logoInput').value='';try{localStorage.removeItem('sp_logo');}catch(e){}}
+
+function actualizarHeader(){const n=document.getElementById('p-nombre').value.trim();const el=document.getElementById('hdrNegocio');if(n){el.textContent='Generado para '+n;el.classList.add('activo');}else{el.textContent='Configura tu negocio en "Mi Negocio"';el.classList.remove('activo');}}
+
+function formatHash(input){let v=input.value.trim();if(v&&!v.startsWith('#'))input.value='#'+v;}
+function toggleViral(input){const chip=document.getElementById('viralChip'),title=document.getElementById('viralTitle');if(input.checked){chip.classList.add('active');title.textContent='# Virales Activados ✓';}else{chip.classList.remove('active');title.textContent='# Virales — Recomienda # más virales';}try{localStorage.setItem('sp_viral',input.checked?'1':'0');}catch(e){}}
+function toggleRed(input){input.closest('.red-chip').classList.toggle('active',input.checked);}
+function getRedesActivas(){return[...document.querySelectorAll('#redesGrid input:checked')].map(i=>i.value);}
+function getHashtags(){return[1,2,3,4,5].map(n=>{const v=document.getElementById('ht-'+n)?.value?.trim();return v&&v.startsWith('#')?v:null;}).filter(Boolean);}
+function isViralMode(){return document.getElementById('viralCheck')?.checked;}
+
+function guardarPerfil(){const p={nombre:document.getElementById('p-nombre').value,giro:document.getElementById('p-giro').value,anos:document.getElementById('p-anos').value,ciudades:document.getElementById('p-ciudades').value,servicios:document.getElementById('p-servicios').value,precios:document.getElementById('p-precios').value,publico:document.getElementById('p-publico').value,valor:document.getElementById('p-valor').value,tono:document.getElementById('p-tono').value,web:document.getElementById('p-web').value,contacto:document.getElementById('p-contacto').value,extra:document.getElementById('p-extra').value,hashtags:getHashtags()};try{localStorage.setItem('sp_perfil',JSON.stringify(p));}catch(e){}const msg=document.getElementById('savedMsg');msg.style.display='flex';setTimeout(()=>msg.style.display='none',2500);}
+
+function cargarPerfil(){try{const p=JSON.parse(localStorage.getItem('sp_perfil')||'{}');['nombre','giro','anos','ciudades','servicios','precios','publico','valor','tono','web','contacto','extra'].forEach(k=>{if(p[k])document.getElementById('p-'+k).value=p[k];});if(p.hashtags)p.hashtags.forEach((h,i)=>{const el=document.getElementById('ht-'+(i+1));if(el)el.value=h;});if(p.nombre)actualizarHeader();}catch(e){}}
+function getPerfil(){try{return JSON.parse(localStorage.getItem('sp_perfil')||'{}');}catch(e){return{};}}
+function cambiarProveedor(input){const g=input.value==='gemini';document.getElementById('apiKeyLabel').textContent=g?'API Key de Google Gemini':'API Key de Anthropic';document.getElementById('apiKeyInput').placeholder=g?'AIzaSy...':'sk-ant-api03-...';}
+function guardarConfig(){try{localStorage.setItem('sp_apikey',document.getElementById('apiKeyInput').value.trim());localStorage.setItem('sp_proveedor',document.querySelector('input[name="proveedor"]:checked').value);}catch(e){}const msg=document.getElementById('savedConfig');msg.style.display='flex';setTimeout(()=>msg.style.display='none',2500);}
+function getConfig(){try{return{key:localStorage.getItem('sp_apikey')||'',prov:localStorage.getItem('sp_proveedor')||'anthropic'};}catch(e){return{key:'',prov:'anthropic'};}}
+
+function mostrarLoading(redes){document.getElementById('rightPanel').innerHTML=redes.map(r=>`<div class="load-card"><div style="display:flex;align-items:center;gap:8px;"><div class="net-icon" style="background:${REDES[r].color}">${r[0]}</div><span style="font-size:12px;font-weight:600;color:var(--theme-primary)">${r}</span><span style="font-size:10px;color:var(--text-muted);margin-left:auto">Generando...</span></div><div class="load-bar"><div class="load-fill"></div></div></div>`).join('');document.getElementById('songsList').innerHTML='<div style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;"><i class="ti ti-music"></i> Seleccionando las canciones perfectas...</div>';}
+
+function copiarYAbrir(red){const texto=document.getElementById('text-'+red)?.value;if(!texto)return;const btn=document.getElementById('btn-'+red);navigator.clipboard.writeText(texto).then(()=>{btn.classList.add('copied-ok');btn.innerHTML='<i class="ti ti-check"></i> ¡Copiado!';setTimeout(()=>{btn.classList.remove('copied-ok');btn.classList.add('ready');btn.innerHTML='<i class="ti ti-external-link"></i> Copiar y abrir';window.open(REDES[red].url,'_blank');},700);}).catch(()=>window.open(REDES[red].url,'_blank'));}
+
+function crearResultCard(red,texto,delay){textosPorRed[red]=texto;const cfg=REDES[red],chars=texto.length;const cc=chars>cfg.limite?'char-over':chars>cfg.rec?'char-warn':'char-ok';const cl=chars>cfg.limite?'Excede el límite':chars>cfg.rec?'Por encima del recomendado':'Longitud ideal';const card=document.createElement('div');card.className='result-card';card.style.animationDelay=delay+'s';card.innerHTML=`<div class="result-hdr"><div class="result-net"><div class="net-icon" style="background:${cfg.color}">${red[0]}</div><div><div class="net-name">${red}</div><div class="net-limit">Recomendado: ${cfg.rec} chars</div></div></div><button class="btn-red ready" id="btn-${red}" onclick="copiarYAbrir('${red}')"><i class="ti ti-external-link"></i> Copiar y abrir</button></div><div class="result-body"><textarea class="result-ta" id="text-${red}" oninput="actualizarContador('${red}')">${texto}</textarea><div class="result-footer"><span class="${cc}" id="cnt-${red}">${chars} chars — ${cl}</span><span style="font-size:10px;color:var(--text-muted)">Editable antes de copiar</span></div></div>`;return card;}
+function actualizarContador(red){const ta=document.getElementById('text-'+red),el=document.getElementById('cnt-'+red),cfg=REDES[red],chars=ta.value.length;const cc=chars>cfg.limite?'char-over':chars>cfg.rec?'char-warn':'char-ok';el.className=cc;el.textContent=chars+' chars — '+(chars>cfg.limite?'Excede el límite':chars>cfg.rec?'Por encima del recomendado':'Longitud ideal');textosPorRed[red]=ta.value;}
+function mostrarCanciones(songs){const lista=document.getElementById('songsList');if(!songs?.length){lista.innerHTML='<div style="font-size:11px;color:var(--text-muted);">No se pudieron generar canciones.</div>';return;}lista.innerHTML=songs.map((s,i)=>`<div class="song-item" style="animation-delay:${i*0.08}s"><div class="song-num">${i+1}</div><div style="flex:1"><div class="song-name">${s.cancion}</div><div class="song-artist">${s.artista}</div></div><div class="song-vibe">${s.vibe}</div></div>`).join('');}
+
+async function generarTextos(){
+  const cfg=getConfig(),perfil=getPerfil(),contexto=document.getElementById('contextoInput').value.trim(),redes=getRedesActivas();
+  if(!cfg.key){alert('Configura tu API Key en "Configuración" primero.');showTab('config');return;}
+  if(!redes.length){alert('Selecciona al menos una red social.');return;}
+  const btn=document.getElementById('btnGenerar');btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Generando...';textosPorRed={};mostrarLoading(redes);
+  const viralMode=isViralMode(),hashtags=getHashtags();
+  const hashInstruccion=viralMode?'MODO VIRAL: ignora hashtags del negocio y usa exclusivamente los más virales y trending ahora según giro, imagen y contenido.':(hashtags.length?`Hashtags del negocio a incluir selectivamente: ${hashtags.join(' ')}`:'');
+  const perfilTexto=Object.entries({Nombre:perfil.nombre,Giro:perfil.giro,Años:perfil.anos,Ciudades:perfil.ciudades,Servicios:perfil.servicios,Precios:perfil.precios,Público:perfil.publico,'Propuesta de valor':perfil.valor,Tono:perfil.tono,Web:perfil.web,Contacto:perfil.contacto,Extra:perfil.extra}).filter(([,v])=>v).map(([k,v])=>`- ${k}: ${v}`).join('\n');
+  const instrucciones=redes.map(r=>{const c=REDES[r];return`**${r}**: ${c.tono}. Hashtags: ${c.tags}. ${c.emoji?'Usa emoticones apropiados.':'Sin emoticones.'} Máx recomendado: ${c.rec} chars.`;}).join('\n');
+  const prompt=`Eres experto en marketing digital.\n\nNEGOCIO:\n${perfilTexto||'Negocio local.'}\n${hashInstruccion}\n\n${contexto?`TEMA: "${contexto}"`:'Genera contenido creativo basado en el perfil y la imagen.'}\n\nINSTRUCCIONES POR RED:\n${instrucciones}\n\nGenera también 5 canciones virales y pegajosas del momento para acompañar esta publicación.\n\nResponde SOLO JSON sin markdown:\n{"textos":{${redes.map(r=>`"${r}":"texto"`).join(',')}},"canciones":[{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""}]}`;
+  try{
+    let resultado={};
+    if(cfg.prov==='anthropic'){const msgs=imageBase64?[{role:'user',content:[{type:'image',source:{type:'base64',media_type:imageType,data:imageBase64}},{type:'text',text:prompt}]}]:[{role:'user',content:prompt}];const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':cfg.key,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2500,messages:msgs})});const data=await res.json();if(data.error)throw new Error(data.error.message);resultado=JSON.parse(data.content?.map(b=>b.text||'').join('').replace(/```json|```/g,'').trim());}
+    else{const parts=[];if(imageBase64)parts.push({inline_data:{mime_type:imageType,data:imageBase64}});parts.push({text:prompt});const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${cfg.key}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}]})});const data=await res.json();if(data.error)throw new Error(data.error.message);resultado=JSON.parse((data.candidates?.[0]?.content?.parts?.[0]?.text||'{}').replace(/```json|```/g,'').trim());}
+    const textos=resultado.textos||resultado;const panel=document.getElementById('rightPanel');panel.innerHTML='';
+    redes.forEach((red,i)=>{if(textos[red])panel.appendChild(crearResultCard(red,textos[red],i*0.07));});
+    if(resultado.canciones)mostrarCanciones(resultado.canciones);
+  }catch(err){
+    document.getElementById('rightPanel').innerHTML=`<div class="card"><div class="card-body"><div style="color:#dc2626;font-size:13px;font-weight:600;margin-bottom:6px;"><i class="ti ti-alert-circle"></i> Error al generar</div><div style="font-size:12px;color:var(--text-muted);line-height:1.6;">${err.message}<br><br>Verifica tu API Key en Configuración.</div></div></div>`;
+    document.getElementById('songsList').innerHTML='<div style="font-size:11px;color:var(--text-muted);">Genera los textos primero.</div>';
+  }
+  btn.disabled=false;btn.innerHTML='<i class="ti ti-wand"></i> Generar textos con IA';
+}
+
+(function init(){
+  renderPantones();cargarPerfil();
+  try{
+    const k=localStorage.getItem('sp_apikey'),pv=localStorage.getItem('sp_proveedor'),pt=localStorage.getItem('sp_pantone'),lg=localStorage.getItem('sp_logo'),vr=localStorage.getItem('sp_viral');
+    if(k)document.getElementById('apiKeyInput').value=k;
+    if(pv){document.querySelector(`input[name="proveedor"][value="${pv}"]`).checked=true;if(pv==='gemini'){document.getElementById('apiKeyLabel').textContent='API Key de Google Gemini';document.getElementById('apiKeyInput').placeholder='AIzaSy...';}}
+    if(pt)aplicarPantone(pt);
+    if(lg){document.getElementById('logoUploadZone').style.display='none';document.getElementById('logoPreviewWrap').style.display='flex';document.getElementById('logoPreviewImg').src=lg;document.getElementById('hdrLogoImg').src=lg;document.getElementById('hdrLogoImg').style.display='block';document.getElementById('logoSlotText').style.display='none';}
+    if(vr==='1'){document.getElementById('viralCheck').checked=true;toggleViral(document.getElementById('viralCheck'));}
+  }catch(e){}
+})();
+
+// PWA Service Worker
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('/sw.js').catch(()=>{}));}
+</script>
+</body>
+</html>
