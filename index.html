@@ -20,11 +20,13 @@
   --theme-btn-text:#ffffff;--white:#ffffff;--text:#0d1f40;
   --text-mid:#3d5478;--text-muted:#7a90b5;--success:#16a34a;
   --radius:10px;--radius-lg:14px;
+  /* Perfil personal color */
+  --personal:#7c3aed;--personal-pale:#f3efff;--personal-border:#d8caff;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{font-family:'Outfit',sans-serif;background:var(--theme-bg);color:var(--text);min-height:100vh;}
 
-/* REGISTRO */
+/* ── REGISTRO ── */
 .reg-screen{position:fixed;inset:0;background:#f0f4fb;z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;}
 .reg-wrap{width:100%;max-width:380px;margin:0 auto;}
 .reg-header{background:var(--theme-primary);border-radius:16px 16px 0 0;padding:24px;text-align:center;border-bottom:3px solid var(--theme-accent);}
@@ -64,10 +66,15 @@ html,body{font-family:'Outfit',sans-serif;background:var(--theme-bg);color:var(-
 .trial-badge{background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;padding:8px 12px;font-size:10px;color:#2e7d32;text-align:center;margin-bottom:14px;font-weight:500;}
 .btn-comenzar{width:100%;background:var(--theme-accent);color:white;border:3px solid rgba(0,0,0,0.2);border-radius:10px;padding:13px;font-family:'Outfit',sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;text-shadow:0 1px 2px rgba(0,0,0,0.2);}
 .btn-comenzar:hover{filter:brightness(0.9);}
+
+/* ── BOTÓN VER TUTORIAL (en reg-body, inactivo) ── */
+.btn-tutorial{width:100%;background:#f5f5f5;border:1.5px solid #e0e0e0;border-radius:10px;padding:10px;font-family:'Outfit',sans-serif;font-size:12px;font-weight:600;color:#aaaaaa;cursor:not-allowed;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:10px;position:relative;}
+.btn-tutorial .prox-badge{background:#e0e0e0;color:#aaa;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:0.5px;text-transform:uppercase;}
+
 .ya-cuenta{text-align:center;margin-top:12px;font-size:11px;color:var(--text-muted);}
 .ya-cuenta a{color:var(--theme-accent);font-weight:600;cursor:pointer;}
 
-/* APP PRINCIPAL */
+/* ── APP PRINCIPAL ── */
 .app-main{display:none;}
 .hdr{background:var(--theme-primary);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid var(--theme-accent);position:sticky;top:0;z-index:100;transition:background 0.4s,border-color 0.4s;}
 .hdr-left{display:flex;align-items:center;gap:12px;}
@@ -79,6 +86,11 @@ html,body{font-family:'Outfit',sans-serif;background:var(--theme-bg);color:var(-
 .hdr-negocio{font-size:10px;color:rgba(255,255,255,0.4);font-weight:400;margin-top:2px;transition:color 0.4s;}
 .hdr-negocio.activo{color:var(--theme-client-text);}
 .hdr-badge{background:var(--theme-accent);color:white;font-size:10px;font-weight:600;padding:4px 12px;border-radius:20px;white-space:nowrap;transition:background 0.4s;}
+
+/* Badge de perfil activo en header */
+.hdr-perfil-badge{display:none;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:0.3px;margin-right:6px;}
+.hdr-perfil-badge.negocio{background:rgba(232,98,26,0.2);color:var(--theme-client-text);}
+.hdr-perfil-badge.personal{background:rgba(124,58,237,0.2);color:#c4b5fd;}
 
 .tabs{display:flex;border-bottom:1px solid var(--theme-border);background:var(--white);padding:0 20px;position:sticky;top:71px;z-index:99;}
 .tab{padding:11px 16px;font-size:12px;font-weight:500;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;display:flex;align-items:center;gap:6px;user-select:none;}
@@ -106,13 +118,38 @@ textarea.fi{resize:none;line-height:1.6;}
 textarea.fi:focus,input.fi:focus{border-color:var(--theme-accent);background:white;}
 textarea.fi::placeholder,input.fi::placeholder{color:var(--text-muted);}
 
+/* ── SWITCH PERFIL ── */
+.perfil-switch-card{background:var(--white);border-radius:var(--radius-lg);border:1px solid var(--theme-border);margin-bottom:12px;overflow:hidden;}
+.perfil-switch-hdr{background:var(--theme-pale);padding:9px 14px;font-size:11px;font-weight:600;color:var(--theme-primary);text-transform:uppercase;letter-spacing:0.7px;display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--theme-border);}
+.perfil-switch-body{padding:14px;}
+.switch-row{display:flex;align-items:center;justify-content:center;gap:12px;}
+.switch-label{font-size:13px;font-weight:700;transition:color 0.25s;user-select:none;cursor:pointer;}
+.switch-label.negocio-lbl{color:var(--theme-primary);}
+.switch-label.personal-lbl{color:var(--text-muted);}
+.switch-label.negocio-lbl.dim{color:var(--text-muted);}
+.switch-label.personal-lbl.lit{color:var(--personal);}
+
+/* Toggle pill */
+.toggle-pill{position:relative;width:52px;height:28px;cursor:pointer;flex-shrink:0;}
+.toggle-pill input{opacity:0;width:0;height:0;position:absolute;}
+.toggle-track{position:absolute;inset:0;background:var(--theme-primary);border-radius:14px;transition:background 0.3s;}
+.toggle-pill input:checked ~ .toggle-track{background:var(--personal);}
+.toggle-knob{position:absolute;top:3px;left:3px;width:22px;height:22px;background:white;border-radius:50%;transition:transform 0.3s;box-shadow:0 1px 4px rgba(0,0,0,0.22);}
+.toggle-pill input:checked ~ .toggle-knob{transform:translateX(24px);}
+
+/* Descripción bajo el switch */
+.switch-desc{margin-top:10px;padding:8px 12px;border-radius:8px;font-size:11px;line-height:1.6;transition:all 0.3s;}
+.switch-desc.negocio-desc{background:var(--theme-pale);color:var(--text-mid);border:1px solid var(--theme-border);}
+.switch-desc.personal-desc{background:var(--personal-pale);color:#4c1d95;border:1px solid var(--personal-border);}
+
+/* ── REDES ── */
 .redes-wrap{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;}
 .red-chip{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:500;transition:all 0.2s;user-select:none;border:1.5px solid var(--theme-border);color:var(--text-muted);background:var(--white);}
 .red-chip input{display:none;}
 .red-chip.active{border-color:var(--theme-accent);background:var(--theme-accent);color:var(--theme-btn-text);}
 .red-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
-/* NUEVO: Tamaño de textos */
+/* ── TAMAÑO DE TEXTOS ── */
 .tamano-wrap{display:grid;grid-template-columns:1fr;gap:6px;}
 .tamano-chip{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:500;transition:all 0.2s;user-select:none;border:1.5px solid var(--theme-border);color:var(--text-muted);background:var(--white);}
 .tamano-chip input{display:none;}
@@ -122,6 +159,7 @@ textarea.fi::placeholder,input.fi::placeholder{color:var(--text-muted);}
 .btn-main:hover{filter:brightness(0.88);transform:translateY(-1px);}
 .btn-main:disabled{opacity:0.5;cursor:not-allowed;transform:none;filter:none;}
 
+/* ── CANCIONES ── */
 .songs-card{background:var(--white);border:1px solid var(--theme-border);border-radius:var(--radius-lg);padding:14px;margin-bottom:12px;}
 .songs-title{font-size:11px;font-weight:700;color:var(--theme-primary);text-transform:uppercase;letter-spacing:0.7px;display:flex;align-items:center;gap:6px;margin-bottom:4px;}
 .songs-sub{font-size:10px;color:var(--text-muted);margin-bottom:10px;line-height:1.5;}
@@ -152,10 +190,25 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
 .result-footer{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
 .char-ok{color:var(--success);font-size:10px;}.char-warn{color:#f59e0b;font-size:10px;}.char-over{color:#dc2626;font-size:10px;}
 
+/* ── TABS PERFILES ── */
+.perfil-tabs{display:flex;gap:0;border-bottom:2px solid var(--theme-border);margin-bottom:20px;}
+.perfil-tab{padding:10px 20px;font-size:12px;font-weight:600;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.15s;display:flex;align-items:center;gap:6px;}
+.perfil-tab.active.negocio-tab{color:var(--theme-primary);border-bottom-color:var(--theme-accent);}
+.perfil-tab.active.personal-tab{color:var(--personal);border-bottom-color:var(--personal);}
+.perfil-tab:hover{color:var(--text);}
+
+/* Sección de perfil con panel visible/oculto */
+.perfil-panel{display:none;}.perfil-panel.active{display:block;}
+
+/* Aviso perfil no configurado */
+.perfil-aviso{background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:12px 14px;font-size:12px;color:#92400e;margin-bottom:14px;display:flex;align-items:flex-start;gap:8px;line-height:1.6;}
+.perfil-aviso i{font-size:15px;flex-shrink:0;margin-top:1px;}
+
 .perfil-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}.perfil-full{grid-column:1/-1;}
 .save-bar{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;align-items:center;}
 .btn-save{background:var(--theme-accent);color:var(--theme-btn-text);border:3px solid rgba(0,0,0,0.2);border-radius:var(--radius);padding:10px 22px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;text-shadow:0 1px 2px rgba(0,0,0,0.2);}
 .btn-save:hover{filter:brightness(0.88);}
+.btn-save.personal-save{background:var(--personal);}
 .saved-msg{font-size:12px;color:var(--success);font-weight:500;display:none;align-items:center;gap:5px;}
 
 .logo-upload-zone{border:2px dashed var(--theme-border);border-radius:var(--radius);height:80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;background:var(--theme-bg);transition:all 0.2s;position:relative;}
@@ -173,11 +226,14 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
 .pantone-label{font-size:10px;font-weight:500;text-align:center;padding:5px 3px;background:white;color:var(--text-mid);border-top:1px solid #eee;}
 
 .hashtag-block{background:var(--theme-pale);border:1px solid var(--theme-border);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px;}
+.hashtag-block.personal-hb{background:var(--personal-pale);border-color:var(--personal-border);}
 .hashtag-block-title{font-size:11px;font-weight:600;color:var(--theme-primary);margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.hashtag-block-title.personal-ht{color:var(--personal);}
 .hashtag-block-note{font-size:10px;color:var(--text-muted);margin-bottom:10px;line-height:1.5;}
 .hashtag-inputs{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 .hashtag-input{border:1px solid var(--theme-border);border-radius:7px;padding:7px 10px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text);background:var(--white);outline:none;width:100%;transition:border 0.2s;}
 .hashtag-input:focus{border-color:var(--theme-accent);}
+.hashtag-input.personal-hi:focus{border-color:var(--personal);}
 .hashtag-input::placeholder{color:var(--text-muted);}
 .viral-chip{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:8px;cursor:pointer;border:2px solid var(--theme-border);background:var(--white);color:var(--text-muted);transition:all 0.2s;user-select:none;grid-column:1/-1;line-height:1.4;}
 .viral-chip input{display:none;}
@@ -194,17 +250,24 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
 
 .api-info{background:var(--theme-pale);border:1px solid var(--theme-border);border-radius:8px;padding:10px 14px;font-size:11px;color:var(--text-mid);margin-bottom:12px;line-height:1.6;}
 
+/* Personal card accent */
+.card.personal-card{border-color:var(--personal-border);}
+.card.personal-card .card-hdr{background:var(--personal-pale);color:var(--personal);border-bottom-color:var(--personal-border);}
+
 @media(max-width:640px){
   .pub-grid{grid-template-columns:1fr;}
   .section{padding:12px 14px;}
   .perfil-grid{grid-template-columns:1fr;}
   .perfil-full{grid-column:1;}
+  .pantones-grid{grid-template-columns:repeat(3,1fr);}
 }
 </style>
 </head>
 <body>
 
-<!-- PANTALLA DE REGISTRO -->
+<!-- ═══════════════════════════════════════════
+     PANTALLA DE REGISTRO
+═══════════════════════════════════════════ -->
 <div class="reg-screen" id="regScreen">
   <div class="reg-wrap">
     <div class="reg-header">
@@ -266,12 +329,22 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
       <button class="btn-comenzar" onclick="entrarApp()">
         <i class="ti ti-rocket"></i> Comenzar ahora
       </button>
+
+      <!-- BOTÓN VER TUTORIAL — inactivo -->
+      <button class="btn-tutorial" disabled title="Tutorial próximamente disponible">
+        <i class="ti ti-player-play"></i>
+        Ver Tutorial
+        <span class="prox-badge">Próximamente</span>
+      </button>
+
       <div class="ya-cuenta">¿Ya tienes cuenta? <a onclick="entrarApp()">Inicia sesión</a></div>
     </div>
   </div>
 </div>
 
-<!-- APP PRINCIPAL -->
+<!-- ═══════════════════════════════════════════
+     APP PRINCIPAL
+═══════════════════════════════════════════ -->
 <div class="app-main" id="appMain">
 
 <div class="hdr">
@@ -282,22 +355,28 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
     </div>
     <div>
       <div class="hdr-appname">OWL <em>Social Publisher</em></div>
-      <div class="hdr-negocio" id="hdrNegocio">Configura tu negocio en "Mi Negocio"</div>
+      <div class="hdr-negocio" id="hdrNegocio">Configura tu perfil en "Perfiles"</div>
     </div>
   </div>
-  <div class="hdr-badge">IA Activada</div>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <div class="hdr-perfil-badge" id="hdrPerfilBadge"></div>
+    <div class="hdr-badge" id="hdrBadge">IA Activada</div>
+  </div>
 </div>
 
 <div class="tabs">
   <div class="tab active" onclick="showTab('publicar')" id="tab-publicar"><i class="ti ti-send"></i> Publicar</div>
-  <div class="tab" onclick="showTab('perfil')" id="tab-perfil"><i class="ti ti-building-store"></i> Mi Negocio</div>
+  <div class="tab" onclick="showTab('perfil')" id="tab-perfil"><i class="ti ti-user-circle"></i> Perfiles</div>
   <div class="tab" onclick="showTab('config')" id="tab-config"><i class="ti ti-settings"></i> Configuración</div>
 </div>
 
-<!-- PUBLICAR -->
+<!-- ═══════════════════
+     PUBLICAR
+═══════════════════ -->
 <div class="section active" id="sec-publicar">
   <div class="pub-grid">
     <div>
+
       <!-- IMAGEN -->
       <div class="card">
         <div class="card-hdr"><i class="ti ti-photo"></i> Imagen</div>
@@ -313,7 +392,7 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
         </div>
       </div>
 
-      <!-- NUEVO: TAMAÑO DE TEXTOS -->
+      <!-- TAMAÑO DE TEXTOS -->
       <div class="card">
         <div class="card-hdr"><i class="ti ti-text-size"></i> Tamaño de tus textos</div>
         <div class="card-body">
@@ -336,13 +415,37 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
         <div class="card-hdr"><i class="ti ti-bulb"></i> ¿Alguna idea para hoy?</div>
         <div class="card-body">
           <div class="field">
-            <label>Si dejas vacío, te doy ideas sobre tu negocio</label>
-            <textarea class="fi" id="contextoInput" rows="3" placeholder="Ej: promoción especial, nuevo servicio, logro del mes..."></textarea>
+            <label>Si dejas vacío, la IA genera ideas según tu perfil activo</label>
+            <textarea class="fi" id="contextoInput" rows="3" placeholder="Ej: viaje de fin de semana, nueva promo, logro del mes..."></textarea>
           </div>
         </div>
       </div>
 
-      <!-- REDES: desactivadas por default -->
+      <!-- ★ SWITCH PERFIL ★ -->
+      <div class="perfil-switch-card" id="perfilSwitchCard">
+        <div class="perfil-switch-hdr"><i class="ti ti-users"></i> Perfil de publicación</div>
+        <div class="perfil-switch-body">
+          <div class="switch-row">
+            <span class="switch-label negocio-lbl" id="lblNegocio" onclick="setPerfilMode(false)">🏢 Negocio</span>
+            <label class="toggle-pill">
+              <input type="checkbox" id="perfilToggle" onchange="onPerfilToggle()">
+              <div class="toggle-track"></div>
+              <div class="toggle-knob"></div>
+            </label>
+            <span class="switch-label personal-lbl" id="lblPersonal" onclick="setPerfilMode(true)">🙋 Personal</span>
+          </div>
+          <div class="switch-desc negocio-desc" id="switchDesc">
+            Generará contenido con el tono y datos de tu <strong>negocio</strong>.
+          </div>
+          <!-- Aviso si perfil no configurado -->
+          <div id="switchAviso" style="display:none;margin-top:8px;padding:7px 10px;background:#fff8f3;border:1px solid #fbd0b5;border-radius:8px;font-size:11px;color:#9a3412;display:flex;align-items:center;gap:7px;">
+            <i class="ti ti-alert-triangle" style="font-size:13px;flex-shrink:0"></i>
+            <span id="switchAvisoTxt">Este perfil no está configurado. <a onclick="showTab('perfil')" style="color:var(--theme-accent);cursor:pointer;font-weight:600;">Configurarlo ahora →</a></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- REDES SOCIALES -->
       <div class="card">
         <div class="card-hdr"><i class="ti ti-share"></i> Redes sociales</div>
         <div class="card-body">
@@ -358,102 +461,175 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
           </button>
         </div>
       </div>
-    </div>
+
+    </div><!-- /col izquierda -->
 
     <div>
       <div class="songs-card">
-        <div class="songs-title"><i class="ti ti-music"></i> 5 canciones recomendadas para tu publicación</div>
-        <div class="songs-sub">La IA analiza tu imagen, giro y texto para sugerirte las más pegajosas y virales del momento</div>
+        <div class="songs-title"><i class="ti ti-music"></i> 5 canciones recomendadas</div>
+        <div class="songs-sub">La IA analiza tu imagen, perfil y texto para sugerirte canciones pegajosas y virales del momento</div>
         <div id="songsList"><div style="font-size:11px;color:var(--text-muted);font-style:italic;">Genera tus textos primero — las canciones aparecerán aquí</div></div>
       </div>
       <div id="rightPanel">
         <div class="empty">
           <div class="empty-icon">✦</div>
           <div class="empty-title">Aquí aparecerán tus textos</div>
-          <div class="empty-sub">Sube una imagen, elige tus redes<br>y presiona "Generar textos con IA"<br><br><span style="color:var(--theme-accent);font-weight:500">Tip: Configura primero tu negocio<br>en "Mi Negocio"</span></div>
+          <div class="empty-sub">Sube una imagen, elige tu perfil,<br>selecciona redes y presiona "Generar textos con IA"<br><br><span style="color:var(--theme-accent);font-weight:500">Tip: Configura tus perfiles<br>en la pestaña "Perfiles"</span></div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- MI NEGOCIO -->
+  </div><!-- /pub-grid -->
+</div><!-- /sec-publicar -->
+
+<!-- ═══════════════════
+     PERFILES
+═══════════════════ -->
 <div class="section" id="sec-perfil">
-  <div class="card" style="max-width:700px">
-    <div class="card-hdr"><i class="ti ti-building-store"></i> Perfil de mi negocio</div>
-    <div class="card-body">
-      <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">Esta información se usa en cada generación. El nombre y logo aparecen automáticamente en el encabezado.</p>
 
-      <div class="field perfil-full" style="margin-bottom:14px;">
-        <label><i class="ti ti-photo" style="font-size:12px"></i> Logo del negocio <span style="font-size:10px;color:var(--text-muted)">(aparece en el encabezado)</span></label>
-        <div class="logo-upload-zone" id="logoUploadZone">
-          <input type="file" accept="image/*" id="logoInput" onchange="handleLogo(this)">
-          <i class="ti ti-cloud-upload" style="font-size:18px;color:var(--text-muted)"></i>
-          <span style="font-size:11px;color:var(--text-muted)">Clic para subir tu logo — PNG transparente recomendado</span>
-        </div>
-        <div class="logo-preview-wrap" id="logoPreviewWrap">
-          <img id="logoPreviewImg" alt="Logo">
-          <div>
-            <div style="font-size:11px;color:var(--text-mid);font-weight:500">Logo cargado</div>
-            <div style="font-size:10px;color:var(--text-muted)">Visible en el encabezado</div>
-            <button class="btn-remove-logo" onclick="removeLogo()"><i class="ti ti-trash"></i> Quitar logo</button>
+  <!-- SUB-TABS -->
+  <div class="perfil-tabs">
+    <div class="perfil-tab active negocio-tab" id="ptab-negocio" onclick="showPerfilTab('negocio')">
+      <i class="ti ti-building-store"></i> Mi Negocio
+    </div>
+    <div class="perfil-tab personal-tab" id="ptab-personal" onclick="showPerfilTab('personal')">
+      <i class="ti ti-user-circle"></i> Mi Perfil Personal
+    </div>
+  </div>
+
+  <!-- ── PANEL NEGOCIO ── -->
+  <div class="perfil-panel active" id="panel-negocio">
+    <div class="card" style="max-width:700px">
+      <div class="card-hdr"><i class="ti ti-building-store"></i> Perfil de mi negocio</div>
+      <div class="card-body">
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">Esta información se usa cuando el switch está en <strong>Negocio</strong>.</p>
+
+        <div class="field perfil-full" style="margin-bottom:14px;">
+          <label><i class="ti ti-photo" style="font-size:12px"></i> Logo del negocio <span style="font-size:10px;color:var(--text-muted)">(aparece en el encabezado)</span></label>
+          <div class="logo-upload-zone" id="logoUploadZone">
+            <input type="file" accept="image/*" id="logoInput" onchange="handleLogo(this)">
+            <i class="ti ti-cloud-upload" style="font-size:18px;color:var(--text-muted)"></i>
+            <span style="font-size:11px;color:var(--text-muted)">Clic para subir tu logo — PNG transparente recomendado</span>
+          </div>
+          <div class="logo-preview-wrap" id="logoPreviewWrap">
+            <img id="logoPreviewImg" alt="Logo">
+            <div>
+              <div style="font-size:11px;color:var(--text-mid);font-weight:500">Logo cargado</div>
+              <div style="font-size:10px;color:var(--text-muted)">Visible en el encabezado</div>
+              <button class="btn-remove-logo" onclick="removeLogo()"><i class="ti ti-trash"></i> Quitar logo</button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="field perfil-full" style="margin-bottom:16px;">
-        <label><i class="ti ti-palette" style="font-size:12px"></i> Paleta de colores</label>
-        <div class="pantones-grid" id="pantonesGrid"></div>
-        <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Cambia los colores de toda la app incluyendo botones</div>
-      </div>
-
-      <div class="perfil-grid">
-        <div class="field perfil-full">
-          <label>Nombre del negocio * <span style="color:var(--theme-accent);font-size:10px">(aparece en el encabezado)</span></label>
-          <input class="fi" id="p-nombre" placeholder="Ej: Salón Bella, Tattoo Studio, Restaurante..." oninput="actualizarHeader()">
+        <div class="field perfil-full" style="margin-bottom:16px;">
+          <label><i class="ti ti-palette" style="font-size:12px"></i> Paleta de colores</label>
+          <div class="pantones-grid" id="pantonesGrid"></div>
+          <div style="font-size:10px;color:var(--text-muted);margin-top:4px;">Cambia los colores de toda la app incluyendo botones</div>
         </div>
-        <div class="field"><label>Giro o industria *</label><input class="fi" id="p-giro" placeholder="Ej: Belleza, Tatuajes, Lashista, Restaurante..."></div>
-        <div class="field"><label>Años de experiencia</label><input class="fi" id="p-anos" placeholder="Ej: 5 años en el mercado"></div>
-        <div class="field"><label>Ciudad(es) donde opera</label><input class="fi" id="p-ciudades" placeholder="Ej: Ciudad de México, Monterrey, Guadalajara..."></div>
-        <div class="field perfil-full"><label>Servicios que ofrece *</label><textarea class="fi" id="p-servicios" rows="3" placeholder="Ej: Corte, color, uñas, pestañas, tatuajes, piercing, comida..."></textarea></div>
-        <div class="field"><label>Precios o rango <span style="font-weight:400;color:var(--text-muted)">(opcional)</span></label><input class="fi" id="p-precios" placeholder="Ej: Desde $200 hasta $2,000 MXN"></div>
-        <div class="field"><label>Público objetivo</label><input class="fi" id="p-publico" placeholder="Ej: Hombres y mujeres 20-45 años"></div>
-        <div class="field perfil-full"><label>Propuesta de valor / diferenciadores</label><textarea class="fi" id="p-valor" rows="2" placeholder="Ej: Atención personalizada, materiales premium, citas el mismo día..."></textarea></div>
-        <div class="field perfil-full"><label>Tono de comunicación</label><textarea class="fi" id="p-tono" rows="2" placeholder="Ej: Amigable, cercano, profesional, juvenil..."></textarea></div>
-        <div class="field"><label>Sitio web</label><input class="fi" id="p-web" placeholder="Ej: www.minegocio.com"></div>
-        <div class="field"><label>WhatsApp o contacto</label><input class="fi" id="p-contacto" placeholder="Ej: WhatsApp 55 1234 5678"></div>
-        <div class="field perfil-full"><label>Información adicional</label><textarea class="fi" id="p-extra" rows="2" placeholder="Cualquier dato extra que la IA deba saber siempre..."></textarea></div>
-      </div>
 
-      <div class="hashtag-block">
-        <div class="hashtag-block-title"><i class="ti ti-hash"></i> # que no deben faltar</div>
-        <div class="hashtag-block-note">Máximo 5 hashtags por publicación. En modo viral usa los 5 más virales del momento.</div>
-        <div class="hashtag-inputs">
-          <input class="hashtag-input" id="ht-1" placeholder="#belleza" oninput="formatHash(this)">
-          <input class="hashtag-input" id="ht-2" placeholder="#style" oninput="formatHash(this)">
-          <input class="hashtag-input" id="ht-3" placeholder="#arte" oninput="formatHash(this)">
-          <input class="hashtag-input" id="ht-4" placeholder="#moda" oninput="formatHash(this)">
-          <input class="hashtag-input" id="ht-5" placeholder="#tendencia" oninput="formatHash(this)">
-          <label class="viral-chip" id="viralChip">
-            <input type="checkbox" id="viralCheck" onchange="toggleViral(this)">
-            <i class="ti ti-trending-up viral-chip-icon"></i>
-            <div class="viral-chip-content">
-              <span class="viral-chip-title" id="viralTitle"># Virales — Recomienda # más virales</span>
-              <span class="viral-chip-desc">Si activas este botón daremos prioridad a los # más virales y no a los tuyos</span>
-            </div>
-          </label>
+        <div class="perfil-grid">
+          <div class="field perfil-full">
+            <label>Nombre del negocio * <span style="color:var(--theme-accent);font-size:10px">(aparece en el encabezado)</span></label>
+            <input class="fi" id="p-nombre" placeholder="Ej: Salón Bella, Tattoo Studio, Restaurante..." oninput="actualizarHeader()">
+          </div>
+          <div class="field"><label>Giro o industria *</label><input class="fi" id="p-giro" placeholder="Ej: Belleza, Tatuajes, Lashista, Restaurante..."></div>
+          <div class="field"><label>Años de experiencia</label><input class="fi" id="p-anos" placeholder="Ej: 5 años en el mercado"></div>
+          <div class="field"><label>Ciudad(es) donde opera</label><input class="fi" id="p-ciudades" placeholder="Ej: Ciudad de México, Monterrey..."></div>
+          <div class="field perfil-full"><label>Servicios que ofrece *</label><textarea class="fi" id="p-servicios" rows="3" placeholder="Ej: Corte, color, uñas, pestañas, tatuajes, piercing..."></textarea></div>
+          <div class="field"><label>Precios o rango <span style="font-weight:400;color:var(--text-muted)">(opcional)</span></label><input class="fi" id="p-precios" placeholder="Ej: Desde $200 hasta $2,000 MXN"></div>
+          <div class="field"><label>Público objetivo</label><input class="fi" id="p-publico" placeholder="Ej: Hombres y mujeres 20-45 años"></div>
+          <div class="field perfil-full"><label>Propuesta de valor / diferenciadores</label><textarea class="fi" id="p-valor" rows="2" placeholder="Ej: Atención personalizada, materiales premium..."></textarea></div>
+          <div class="field perfil-full"><label>Tono de comunicación</label><textarea class="fi" id="p-tono" rows="2" placeholder="Ej: Amigable, cercano, profesional, juvenil..."></textarea></div>
+          <div class="field"><label>Sitio web</label><input class="fi" id="p-web" placeholder="Ej: www.minegocio.com"></div>
+          <div class="field"><label>WhatsApp o contacto</label><input class="fi" id="p-contacto" placeholder="Ej: WhatsApp 55 1234 5678"></div>
+          <div class="field perfil-full"><label>Información adicional</label><textarea class="fi" id="p-extra" rows="2" placeholder="Cualquier dato extra que la IA deba saber siempre..."></textarea></div>
         </div>
-      </div>
 
-      <div class="save-bar">
-        <div class="saved-msg" id="savedMsg"><i class="ti ti-circle-check"></i> Perfil guardado</div>
-        <button class="btn-save" onclick="guardarPerfil()"><i class="ti ti-device-floppy"></i> Guardar perfil</button>
+        <div class="hashtag-block">
+          <div class="hashtag-block-title"><i class="ti ti-hash"></i> # que no deben faltar</div>
+          <div class="hashtag-block-note">Máximo 5 hashtags por publicación. En modo viral usa los 5 más virales del momento.</div>
+          <div class="hashtag-inputs">
+            <input class="hashtag-input" id="ht-1" placeholder="#belleza" oninput="formatHash(this)">
+            <input class="hashtag-input" id="ht-2" placeholder="#style" oninput="formatHash(this)">
+            <input class="hashtag-input" id="ht-3" placeholder="#arte" oninput="formatHash(this)">
+            <input class="hashtag-input" id="ht-4" placeholder="#moda" oninput="formatHash(this)">
+            <input class="hashtag-input" id="ht-5" placeholder="#tendencia" oninput="formatHash(this)">
+            <label class="viral-chip" id="viralChip">
+              <input type="checkbox" id="viralCheck" onchange="toggleViral(this)">
+              <i class="ti ti-trending-up viral-chip-icon"></i>
+              <div class="viral-chip-content">
+                <span class="viral-chip-title" id="viralTitle"># Virales — Recomienda # más virales</span>
+                <span class="viral-chip-desc">Si activas este botón daremos prioridad a los # más virales y no a los tuyos</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="save-bar">
+          <div class="saved-msg" id="savedMsg"><i class="ti ti-circle-check"></i> Perfil guardado</div>
+          <button class="btn-save" onclick="guardarPerfil()"><i class="ti ti-device-floppy"></i> Guardar perfil negocio</button>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+  </div><!-- /panel-negocio -->
 
-<!-- CONFIG -->
+  <!-- ── PANEL PERSONAL ── -->
+  <div class="perfil-panel" id="panel-personal">
+    <div class="card personal-card" style="max-width:700px">
+      <div class="card-hdr"><i class="ti ti-user-circle"></i> Mi Perfil Personal</div>
+      <div class="card-body">
+        <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">Esta información se usa cuando el switch está en <strong>Personal</strong>. Solo llena lo que aplique — no todo es obligatorio.</p>
+
+        <div class="perfil-grid">
+          <div class="field perfil-full">
+            <label>¿Cómo te describes? <span style="color:var(--text-muted);font-weight:400">(opcional pero recomendado)</span></label>
+            <input class="fi" id="pp-descripcion" placeholder="Ej: mamá, viajera, foodie, emprendedora, amante del café...">
+          </div>
+          <div class="field perfil-full">
+            <label>¿De qué ciudad eres?</label>
+            <input class="fi" id="pp-ciudad" placeholder="Ej: Ciudad de México, Guadalajara, Monterrey...">
+          </div>
+          <div class="field perfil-full">
+            <label>Tono de tus publicaciones personales</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;" id="tonoPersonalGrid">
+              <label class="tamano-chip" id="tp-divertido" onclick="selTonoPersonal('divertido')"><input type="radio" name="tonop"> 😄 Divertido y casual</label>
+              <label class="tamano-chip" id="tp-reflexivo" onclick="selTonoPersonal('reflexivo')"><input type="radio" name="tonop"> 💭 Reflexivo e inspirador</label>
+              <label class="tamano-chip" id="tp-cotidiano" onclick="selTonoPersonal('cotidiano')"><input type="radio" name="tonop"> ☀️ Cotidiano y cercano</label>
+              <label class="tamano-chip active" id="tp-libre" onclick="selTonoPersonal('libre')"><input type="radio" name="tonop" checked> 🎯 Libre — la IA decide</label>
+            </div>
+          </div>
+          <div class="field perfil-full">
+            <label>Intereses o temas que publicas frecuentemente <span style="color:var(--text-muted);font-weight:400">(opcional)</span></label>
+            <textarea class="fi" id="pp-intereses" rows="2" placeholder="Ej: viajes, comida, moda, fitness, familia, mascotas..."></textarea>
+          </div>
+        </div>
+
+        <!-- Hashtags personales -->
+        <div class="hashtag-block personal-hb">
+          <div class="hashtag-block-title personal-ht"><i class="ti ti-hash"></i> Tus hashtags personales favoritos</div>
+          <div class="hashtag-block-note">Máximo 5. Ejemplos: <span style="color:var(--personal);font-weight:600">#mejoresamigas #reflexiones #BestFriends #party #nocheloca</span></div>
+          <div class="hashtag-inputs">
+            <input class="hashtag-input personal-hi" id="pht-1" placeholder="#mejoresamigas" oninput="formatHash(this)">
+            <input class="hashtag-input personal-hi" id="pht-2" placeholder="#reflexiones" oninput="formatHash(this)">
+            <input class="hashtag-input personal-hi" id="pht-3" placeholder="#BestFriends" oninput="formatHash(this)">
+            <input class="hashtag-input personal-hi" id="pht-4" placeholder="#party" oninput="formatHash(this)">
+            <input class="hashtag-input personal-hi" id="pht-5" placeholder="#nocheloca" oninput="formatHash(this)">
+          </div>
+        </div>
+
+        <div class="save-bar">
+          <div class="saved-msg" id="savedMsgPersonal"><i class="ti ti-circle-check"></i> Perfil personal guardado</div>
+          <button class="btn-save personal-save" onclick="guardarPerfilPersonal()"><i class="ti ti-device-floppy"></i> Guardar perfil personal</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /panel-personal -->
+
+</div><!-- /sec-perfil -->
+
+<!-- ═══════════════════
+     CONFIGURACIÓN
+═══════════════════ -->
 <div class="section" id="sec-config">
   <div class="card" style="max-width:500px">
     <div class="card-hdr"><i class="ti ti-settings"></i> Configuración</div>
@@ -464,23 +640,26 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
       </div>
       <div style="font-size:12px;color:var(--text-muted);line-height:1.8;">
         <div>✅ IA activa y lista para usar</div>
+        <div>✅ Doble perfil: Negocio + Personal</div>
         <div>✅ Generación de textos por red social</div>
         <div>✅ Recomendación de canciones virales</div>
         <div>✅ Máximo 5 hashtags por publicación</div>
       </div>
       <div style="margin-top:16px;padding:12px;background:var(--theme-pale);border-radius:var(--radius);font-size:11px;color:var(--text-mid);">
-        <strong>Versión:</strong> OWL Social Publisher v1.1<br>
+        <strong>Versión:</strong> OWL Social Publisher v1.2<br>
         <strong>Desarrollado por:</strong> OWL Tech
       </div>
     </div>
   </div>
 </div>
 
-</div><!-- fin app-main -->
+</div><!-- /app-main -->
 
+<!-- ═══════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════ -->
 <script>
-// API KEY removida — vive en el servidor (Vercel env vars)
-
+// ── CONSTANTES ──────────────────────────────────────────────
 const REDES={
   Facebook:{color:'#1877f2',url:'https://www.facebook.com',limite:63206,rec:400,emoji:true,tono:'conversacional y cercano, termina con pregunta para generar interacción. Separa cada idea con salto de línea doble.'},
   Instagram:{color:'#e1306c',url:'https://www.instagram.com',limite:2200,rec:150,emoji:true,tono:'visual e inspirador, empieza con gancho, termina con call to action. Separa cada idea con salto de línea doble. Hashtags al final en bloque separado.'},
@@ -497,9 +676,12 @@ const PANTONES=[
   {id:'baby',label:'Baby',colors:['#c2185b','#f48fb1','#ffffff','#fce4f0'],vars:{primary:'#c2185b',accent:'#e91e8c',bg:'#fce4f0',pale:'#fce8f3',clientText:'#ffb3d9',border:'#f0c0d8',btnText:'#ffffff'}}
 ];
 
+// ── ESTADO ──────────────────────────────────────────────────
 let imageBase64=null,imageType='image/jpeg',textosPorRed={},pantoneActivo='institucional';
 let claveGenerada='',claveVisible=false,memSeleccionada='anual';
+let modoPersonal=false; // false=negocio, true=personal
 
+// ── HELPERS REGISTRO ────────────────────────────────────────
 function soloNums(input){input.value=input.value.replace(/\D/g,'');}
 function selMem(tipo){memSeleccionada=tipo;document.getElementById('chip-anual').classList.toggle('active',tipo==='anual');document.getElementById('chip-prueba').classList.toggle('active',tipo==='prueba');document.getElementById('trialBadge').style.display=tipo==='prueba'?'block':'none';}
 
@@ -521,98 +703,207 @@ function generarClave(){
   document.getElementById('claveBox').style.display='block';
   selMem('prueba');
 }
-
-function toggleClave(){
-  claveVisible=!claveVisible;
-  if(claveVisible){document.getElementById('claveDots').style.display='none';document.getElementById('claveValor').style.display='block';document.getElementById('claveValor').textContent=claveGenerada;document.getElementById('revelaTxt').textContent='Ocultar clave';}
-  else{document.getElementById('claveDots').style.display='block';document.getElementById('claveValor').style.display='none';document.getElementById('revelaTxt').textContent='Mostrar clave';}
-}
-
+function toggleClave(){claveVisible=!claveVisible;if(claveVisible){document.getElementById('claveDots').style.display='none';document.getElementById('claveValor').style.display='block';document.getElementById('claveValor').textContent=claveGenerada;document.getElementById('revelaTxt').textContent='Ocultar clave';}else{document.getElementById('claveDots').style.display='block';document.getElementById('claveValor').style.display='none';document.getElementById('revelaTxt').textContent='Mostrar clave';}}
 function copiarClave(){if(!claveGenerada)return;navigator.clipboard.writeText(claveGenerada).then(()=>{document.getElementById('copyTxt').textContent='¡Copiada!';setTimeout(()=>document.getElementById('copyTxt').textContent='Copiar clave',2000);});}
+function entrarApp(){const nombre=document.getElementById('reg-nombre').value.trim();if(!nombre){alert('Ingresa tu nombre para continuar');return;}try{localStorage.setItem('owl_usuario',nombre);}catch(e){}document.getElementById('regScreen').style.display='none';document.getElementById('appMain').style.display='block';init();}
 
-function entrarApp(){
-  const nombre=document.getElementById('reg-nombre').value.trim();
-  if(!nombre){alert('Ingresa tu nombre para continuar');return;}
-  try{localStorage.setItem('owl_usuario',nombre);}catch(e){}
-  document.getElementById('regScreen').style.display='none';
-  document.getElementById('appMain').style.display='block';
-  init();
+// ── SWITCH PERFIL ────────────────────────────────────────────
+function onPerfilToggle(){
+  modoPersonal=document.getElementById('perfilToggle').checked;
+  actualizarSwitchUI();
+}
+function setPerfilMode(esPersonal){
+  modoPersonal=esPersonal;
+  document.getElementById('perfilToggle').checked=esPersonal;
+  actualizarSwitchUI();
+}
+function actualizarSwitchUI(){
+  const lblN=document.getElementById('lblNegocio');
+  const lblP=document.getElementById('lblPersonal');
+  const desc=document.getElementById('switchDesc');
+  const aviso=document.getElementById('switchAviso');
+  const avisoTxt=document.getElementById('switchAvisoTxt');
+  const badge=document.getElementById('hdrPerfilBadge');
+
+  if(modoPersonal){
+    lblN.classList.add('dim'); lblP.classList.add('lit'); lblP.classList.remove('dim'); lblN.classList.remove('lit');
+    desc.className='switch-desc personal-desc';
+    desc.innerHTML='Generará contenido con el tono de tu <strong>perfil personal</strong>.';
+    badge.style.display='flex'; badge.className='hdr-perfil-badge personal'; badge.innerHTML='<i class="ti ti-user-circle"></i> Personal';
+    // Verificar si tiene perfil personal configurado
+    const pp=getPerfilPersonal();
+    if(!pp.descripcion && !pp.intereses){
+      aviso.style.display='flex';
+      avisoTxt.innerHTML='Perfil personal no configurado. <a onclick="showTab(\'perfil\');showPerfilTab(\'personal\')" style="color:#e8621a;cursor:pointer;font-weight:600;">Configurarlo ahora →</a>';
+    } else { aviso.style.display='none'; }
+  } else {
+    lblN.classList.remove('dim'); lblP.classList.remove('lit'); lblN.classList.add('lit'); lblP.classList.remove('lit');
+    desc.className='switch-desc negocio-desc';
+    desc.innerHTML='Generará contenido con el tono y datos de tu <strong>negocio</strong>.';
+    badge.style.display='flex'; badge.className='hdr-perfil-badge negocio'; badge.innerHTML='<i class="ti ti-building-store"></i> Negocio';
+    // Verificar si tiene perfil negocio configurado
+    const pn=getPerfil();
+    if(!pn.nombre && !pn.giro){
+      aviso.style.display='flex';
+      avisoTxt.innerHTML='Perfil de negocio no configurado. <a onclick="showTab(\'perfil\')" style="color:#e8621a;cursor:pointer;font-weight:600;">Configurarlo ahora →</a>';
+    } else { aviso.style.display='none'; }
+  }
 }
 
-// TAMAÑO DE TEXTOS
-function selTamano(v){
-  ['maximo','medio','corto'].forEach(x=>document.getElementById('chip-'+x).classList.remove('active'));
-  document.getElementById('chip-'+v).classList.add('active');
-}
-function getTamanoInstruccion(){
-  if(document.getElementById('chip-maximo').classList.contains('active'))return'LONGITUD: Usa el máximo de caracteres permitido para cada red. Textos largos y completos.';
-  if(document.getElementById('chip-corto').classList.contains('active'))return'LONGITUD: Textos muy cortos y directos. Ve al punto. Máximo la mitad del límite recomendado.';
-  return'LONGITUD: Textos de longitud media. Cerca del límite recomendado de cada red.';
+// ── SUB-TABS PERFILES ────────────────────────────────────────
+function showPerfilTab(tab){
+  document.querySelectorAll('.perfil-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.perfil-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+  document.getElementById('ptab-'+tab).classList.add('active');
 }
 
+// ── TAMAÑO TEXTOS ────────────────────────────────────────────
+function selTamano(v){['maximo','medio','corto'].forEach(x=>document.getElementById('chip-'+x).classList.remove('active'));document.getElementById('chip-'+v).classList.add('active');}
+function getTamanoInstruccion(){if(document.getElementById('chip-maximo').classList.contains('active'))return'LONGITUD: Usa el máximo de caracteres permitido para cada red. Textos largos y completos.';if(document.getElementById('chip-corto').classList.contains('active'))return'LONGITUD: Textos muy cortos y directos. Ve al punto. Máximo la mitad del límite recomendado.';return'LONGITUD: Textos de longitud media. Cerca del límite recomendado de cada red.';}
+
+// ── TONO PERSONAL ────────────────────────────────────────────
+function selTonoPersonal(v){
+  ['divertido','reflexivo','cotidiano','libre'].forEach(x=>{
+    const el=document.getElementById('tp-'+x);
+    if(el)el.classList.toggle('active',x===v);
+  });
+}
+function getTonoPersonal(){
+  const tonos=['divertido','reflexivo','cotidiano','libre'];
+  for(const t of tonos){if(document.getElementById('tp-'+t)?.classList.contains('active'))return t;}
+  return 'libre';
+}
+
+// ── PANTONES ─────────────────────────────────────────────────
 function renderPantones(){document.getElementById('pantonesGrid').innerHTML=PANTONES.map(p=>`<div class="pantone-card ${p.id===pantoneActivo?'selected':''}" onclick="aplicarPantone('${p.id}')"><div class="pantone-preview" style="background:${p.vars.primary}">${p.colors.map(c=>`<div class="pantone-dot" style="background:${c}"></div>`).join('')}</div><div class="pantone-label">${p.label}</div></div>`).join('');}
-
 function aplicarPantone(id){pantoneActivo=id;const p=PANTONES.find(x=>x.id===id);if(!p)return;const r=document.documentElement.style;r.setProperty('--theme-primary',p.vars.primary);r.setProperty('--theme-accent',p.vars.accent);r.setProperty('--theme-bg',p.vars.bg);r.setProperty('--theme-pale',p.vars.pale);r.setProperty('--theme-client-text',p.vars.clientText);r.setProperty('--theme-border',p.vars.border);r.setProperty('--theme-btn-text',p.vars.btnText);document.body.style.background=p.vars.bg;renderPantones();try{localStorage.setItem('sp_pantone',id);}catch(e){}}
 
+// ── TABS PRINCIPALES ─────────────────────────────────────────
 function showTab(t){document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));document.getElementById('sec-'+t).classList.add('active');document.getElementById('tab-'+t).classList.add('active');}
 
+// ── IMAGEN ───────────────────────────────────────────────────
 function handleFile(input){const file=input.files[0];if(!file)return;imageType=file.type||'image/jpeg';const r=new FileReader();r.onload=e=>{imageBase64=e.target.result.split(',')[1];document.getElementById('previewImg').src=e.target.result;document.getElementById('previewImg').style.display='block';document.getElementById('uploadZone').style.display='none';document.getElementById('btnResetImg').style.display='block';};r.readAsDataURL(file);}
 function resetImg(){imageBase64=null;document.getElementById('previewImg').style.display='none';document.getElementById('uploadZone').style.display='flex';document.getElementById('btnResetImg').style.display='none';document.getElementById('fileInput').value='';}
 
+// ── LOGO ─────────────────────────────────────────────────────
 function handleLogo(input){const file=input.files[0];if(!file)return;const r=new FileReader();r.onload=e=>{const src=e.target.result;document.getElementById('logoUploadZone').style.display='none';document.getElementById('logoPreviewWrap').style.display='flex';document.getElementById('logoPreviewImg').src=src;document.getElementById('hdrLogoImg').src=src;document.getElementById('hdrLogoImg').style.display='block';document.getElementById('logoSlotText').style.display='none';try{localStorage.setItem('sp_logo',src);}catch(e){}};r.readAsDataURL(file);}
 function removeLogo(){document.getElementById('logoUploadZone').style.display='flex';document.getElementById('logoPreviewWrap').style.display='none';document.getElementById('hdrLogoImg').style.display='none';document.getElementById('logoSlotText').style.display='block';document.getElementById('logoInput').value='';try{localStorage.removeItem('sp_logo');}catch(e){}}
 
-function actualizarHeader(){const n=document.getElementById('p-nombre').value.trim();const el=document.getElementById('hdrNegocio');if(n){el.textContent='Generado para '+n;el.classList.add('activo');}else{el.textContent='Configura tu negocio en "Mi Negocio"';el.classList.remove('activo');}}
+// ── HEADER ───────────────────────────────────────────────────
+function actualizarHeader(){const n=document.getElementById('p-nombre').value.trim();const el=document.getElementById('hdrNegocio');if(n){el.textContent='Generado para '+n;el.classList.add('activo');}else{el.textContent='Configura tu perfil en "Perfiles"';el.classList.remove('activo');}}
 
+// ── HASHTAGS ─────────────────────────────────────────────────
 function formatHash(input){let v=input.value.trim();if(v&&!v.startsWith('#'))input.value='#'+v;}
 function toggleViral(input){const chip=document.getElementById('viralChip'),title=document.getElementById('viralTitle');if(input.checked){chip.classList.add('active');title.textContent='# Virales Activados ✓';}else{chip.classList.remove('active');title.textContent='# Virales — Recomienda # más virales';}try{localStorage.setItem('sp_viral',input.checked?'1':'0');}catch(e){}}
 function toggleRed(input){input.closest('.red-chip').classList.toggle('active',input.checked);}
 function getRedesActivas(){return[...document.querySelectorAll('#redesGrid input:checked')].map(i=>i.value);}
+
 function getHashtags(){return[1,2,3,4,5].map(n=>{const v=document.getElementById('ht-'+n)?.value?.trim();return v&&v.startsWith('#')?v:null;}).filter(Boolean);}
+function getHashtagsPersonal(){return[1,2,3,4,5].map(n=>{const v=document.getElementById('pht-'+n)?.value?.trim();return v&&v.startsWith('#')?v:null;}).filter(Boolean);}
 function isViralMode(){return document.getElementById('viralCheck')?.checked;}
 
-function guardarPerfil(){const p={nombre:document.getElementById('p-nombre').value,giro:document.getElementById('p-giro').value,anos:document.getElementById('p-anos').value,ciudades:document.getElementById('p-ciudades').value,servicios:document.getElementById('p-servicios').value,precios:document.getElementById('p-precios').value,publico:document.getElementById('p-publico').value,valor:document.getElementById('p-valor').value,tono:document.getElementById('p-tono').value,web:document.getElementById('p-web').value,contacto:document.getElementById('p-contacto').value,extra:document.getElementById('p-extra').value,hashtags:getHashtags()};try{localStorage.setItem('sp_perfil',JSON.stringify(p));}catch(e){}const msg=document.getElementById('savedMsg');msg.style.display='flex';setTimeout(()=>msg.style.display='none',2500);}
-function cargarPerfil(){try{const p=JSON.parse(localStorage.getItem('sp_perfil')||'{}');['nombre','giro','anos','ciudades','servicios','precios','publico','valor','tono','web','contacto','extra'].forEach(k=>{if(p[k])document.getElementById('p-'+k).value=p[k];});if(p.hashtags)p.hashtags.forEach((h,i)=>{const el=document.getElementById('ht-'+(i+1));if(el)el.value=h;});if(p.nombre)actualizarHeader();}catch(e){}}
+// ── GUARDAR / CARGAR PERFILES ────────────────────────────────
+function guardarPerfil(){
+  const p={nombre:document.getElementById('p-nombre').value,giro:document.getElementById('p-giro').value,anos:document.getElementById('p-anos').value,ciudades:document.getElementById('p-ciudades').value,servicios:document.getElementById('p-servicios').value,precios:document.getElementById('p-precios').value,publico:document.getElementById('p-publico').value,valor:document.getElementById('p-valor').value,tono:document.getElementById('p-tono').value,web:document.getElementById('p-web').value,contacto:document.getElementById('p-contacto').value,extra:document.getElementById('p-extra').value,hashtags:getHashtags()};
+  try{localStorage.setItem('sp_perfil',JSON.stringify(p));}catch(e){}
+  const msg=document.getElementById('savedMsg');msg.style.display='flex';setTimeout(()=>msg.style.display='none',2500);
+  if(!modoPersonal)actualizarSwitchUI();
+}
+
+function guardarPerfilPersonal(){
+  const pp={descripcion:document.getElementById('pp-descripcion').value,ciudad:document.getElementById('pp-ciudad').value,tono:getTonoPersonal(),intereses:document.getElementById('pp-intereses').value,hashtags:getHashtagsPersonal()};
+  try{localStorage.setItem('sp_perfil_personal',JSON.stringify(pp));}catch(e){}
+  const msg=document.getElementById('savedMsgPersonal');msg.style.display='flex';setTimeout(()=>msg.style.display='none',2500);
+  if(modoPersonal)actualizarSwitchUI();
+}
+
+function cargarPerfil(){
+  try{
+    const p=JSON.parse(localStorage.getItem('sp_perfil')||'{}');
+    ['nombre','giro','anos','ciudades','servicios','precios','publico','valor','tono','web','contacto','extra'].forEach(k=>{if(p[k])document.getElementById('p-'+k).value=p[k];});
+    if(p.hashtags)p.hashtags.forEach((h,i)=>{const el=document.getElementById('ht-'+(i+1));if(el)el.value=h;});
+    if(p.nombre)actualizarHeader();
+  }catch(e){}
+  try{
+    const pp=JSON.parse(localStorage.getItem('sp_perfil_personal')||'{}');
+    if(pp.descripcion)document.getElementById('pp-descripcion').value=pp.descripcion;
+    if(pp.ciudad)document.getElementById('pp-ciudad').value=pp.ciudad;
+    if(pp.tono)selTonoPersonal(pp.tono);
+    if(pp.intereses)document.getElementById('pp-intereses').value=pp.intereses;
+    if(pp.hashtags)pp.hashtags.forEach((h,i)=>{const el=document.getElementById('pht-'+(i+1));if(el)el.value=h;});
+  }catch(e){}
+}
+
 function getPerfil(){try{return JSON.parse(localStorage.getItem('sp_perfil')||'{}');}catch(e){return{};}}
+function getPerfilPersonal(){try{return JSON.parse(localStorage.getItem('sp_perfil_personal')||'{}');}catch(e){return{};}}
 
-function mostrarLoading(redes){document.getElementById('rightPanel').innerHTML=redes.map(r=>`<div class="load-card"><div style="display:flex;align-items:center;gap:8px;"><div class="net-icon" style="background:${REDES[r].color}">${r[0]}</div><span style="font-size:12px;font-weight:600;color:var(--theme-primary)">${r}</span><span style="font-size:10px;color:var(--text-muted);margin-left:auto">Generando...</span></div><div class="load-bar"><div class="load-fill"></div></div></div>`).join('');document.getElementById('songsList').innerHTML='<div style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;"><i class="ti ti-music"></i> Seleccionando las canciones perfectas...</div>';}
+// ── LOADING ──────────────────────────────────────────────────
+function mostrarLoading(redes){
+  document.getElementById('rightPanel').innerHTML=redes.map(r=>`<div class="load-card"><div style="display:flex;align-items:center;gap:8px;"><div class="net-icon" style="background:${REDES[r].color}">${r[0]}</div><span style="font-size:12px;font-weight:600;color:var(--theme-primary)">${r}</span><span style="font-size:10px;color:var(--text-muted);margin-left:auto">Generando...</span></div><div class="load-bar"><div class="load-fill"></div></div></div>`).join('');
+  document.getElementById('songsList').innerHTML='<div style="font-size:11px;color:var(--text-muted);display:flex;align-items:center;gap:6px;"><i class="ti ti-music"></i> Seleccionando las canciones perfectas...</div>';
+}
 
+// ── COPIAR Y ABRIR ───────────────────────────────────────────
 function copiarYAbrir(red){const texto=document.getElementById('text-'+red)?.value;if(!texto)return;const btn=document.getElementById('btn-'+red);navigator.clipboard.writeText(texto).then(()=>{btn.classList.add('copied-ok');btn.innerHTML='<i class="ti ti-check"></i> ¡Copiado!';setTimeout(()=>{btn.classList.remove('copied-ok');btn.classList.add('ready');btn.innerHTML='<i class="ti ti-external-link"></i> Copiar y abrir';window.open(REDES[red].url,'_blank');},700);}).catch(()=>window.open(REDES[red].url,'_blank'));}
 
 function crearResultCard(red,texto,delay){textosPorRed[red]=texto;const cfg=REDES[red],chars=texto.length;const cc=chars>cfg.limite?'char-over':chars>cfg.rec?'char-warn':'char-ok';const cl=chars>cfg.limite?'Excede el límite':chars>cfg.rec?'Por encima del recomendado':'Longitud ideal';const card=document.createElement('div');card.className='result-card';card.style.animationDelay=delay+'s';card.innerHTML=`<div class="result-hdr"><div class="result-net"><div class="net-icon" style="background:${cfg.color}">${red[0]}</div><div><div class="net-name">${red}</div><div class="net-limit">Recomendado: ${cfg.rec} chars</div></div></div><button class="btn-red ready" id="btn-${red}" onclick="copiarYAbrir('${red}')"><i class="ti ti-external-link"></i> Copiar y abrir</button></div><div class="result-body"><textarea class="result-ta" id="text-${red}" oninput="actualizarContador('${red}')">${texto}</textarea><div class="result-footer"><span class="${cc}" id="cnt-${red}">${chars} chars — ${cl}</span><span style="font-size:10px;color:var(--text-muted)">Editable antes de copiar</span></div></div>`;return card;}
 function actualizarContador(red){const ta=document.getElementById('text-'+red),el=document.getElementById('cnt-'+red),cfg=REDES[red],chars=ta.value.length;const cc=chars>cfg.limite?'char-over':chars>cfg.rec?'char-warn':'char-ok';el.className=cc;el.textContent=chars+' chars — '+(chars>cfg.limite?'Excede el límite':chars>cfg.rec?'Por encima del recomendado':'Longitud ideal');textosPorRed[red]=ta.value;}
 function mostrarCanciones(songs){const lista=document.getElementById('songsList');if(!songs?.length){lista.innerHTML='<div style="font-size:11px;color:var(--text-muted);">No se pudieron generar canciones.</div>';return;}lista.innerHTML=songs.map((s,i)=>`<div class="song-item" style="animation-delay:${i*0.08}s"><div class="song-num">${i+1}</div><div style="flex:1"><div class="song-name">${s.cancion}</div><div class="song-artist">${s.artista}</div></div><div class="song-vibe">${s.vibe}</div></div>`).join('');}
 
+// ── GENERAR TEXTOS ───────────────────────────────────────────
 async function generarTextos(){
-  const perfil=getPerfil(),contexto=document.getElementById('contextoInput').value.trim(),redes=getRedesActivas();
+  const redes=getRedesActivas();
   if(!redes.length){alert('Selecciona al menos una red social.');return;}
-  const btn=document.getElementById('btnGenerar');btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Generando...';textosPorRed={};mostrarLoading(redes);
-  const viralMode=isViralMode(),hashtags=getHashtags();
 
-  // CAMBIO 4: Máximo 5 hashtags
-  const hashInstruccion=viralMode
-    ?'HASHTAGS: Usa EXACTAMENTE 5 hashtags, los más virales del momento. NUNCA más de 5.'
-    :(hashtags.length
-      ?`HASHTAGS: Incluye máximo 5 de estos hashtags del negocio: ${hashtags.join(' ')}. NUNCA más de 5 en total.`
-      :'HASHTAGS: Usa máximo 5 hashtags relevantes. NUNCA más de 5.');
+  const btn=document.getElementById('btnGenerar');
+  btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Generando...';
+  textosPorRed={};mostrarLoading(redes);
 
-  // CAMBIO 2: Tamaño de textos
+  const contexto=document.getElementById('contextoInput').value.trim();
   const tamanoInstruccion=getTamanoInstruccion();
-
-  const perfilTexto=Object.entries({Nombre:perfil.nombre,Giro:perfil.giro,Años:perfil.anos,Ciudades:perfil.ciudades,Servicios:perfil.servicios,Precios:perfil.precios,Público:perfil.publico,'Propuesta de valor':perfil.valor,Tono:perfil.tono,Web:perfil.web,Contacto:perfil.contacto,Extra:perfil.extra}).filter(([,v])=>v).map(([k,v])=>`- ${k}: ${v}`).join('\n');
-
   const instrucciones=redes.map(r=>{const c=REDES[r];return`**${r}**: ${c.tono}. ${c.emoji?'Usa emoticones apropiados.':'Sin emoticones.'} Máx recomendado: ${REDES[r].rec} chars.`;}).join('\n');
 
-  // CAMBIO 1: Saltos de línea obligatorios + tamaño
-  const prompt=`Eres experto en marketing digital.\n\nNEGOCIO:\n${perfilTexto||'Negocio local.'}\n\n${hashInstruccion}\n\n${tamanoInstruccion}\n\nFORMATO OBLIGATORIO: Separa cada idea u oración con doble salto de línea. NUNCA uses bloques de texto corrido sin saltos.\n\n${contexto?`TEMA: "${contexto}"`:'Genera contenido creativo basado en el perfil y la imagen.'}\n\nINSTRUCCIONES POR RED:\n${instrucciones}\n\nGenera también 5 canciones virales y pegajosas del momento para acompañar esta publicación.\n\nResponde SOLO JSON sin markdown:\n{"textos":{${redes.map(r=>`"${r}":"texto"`).join(',')}},"canciones":[{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""}]}`;
+  let prompt='';
+
+  if(!modoPersonal){
+    // ── MODO NEGOCIO ──────────────────────────────────────────
+    const perfil=getPerfil();
+    const viralMode=isViralMode();
+    const hashtags=getHashtags();
+    const hashInstruccion=viralMode
+      ?'HASHTAGS: Usa EXACTAMENTE 5 hashtags, los más virales del momento. NUNCA más de 5.'
+      :(hashtags.length
+        ?`HASHTAGS: Incluye máximo 5 de estos hashtags del negocio: ${hashtags.join(' ')}. NUNCA más de 5 en total.`
+        :'HASHTAGS: Usa máximo 5 hashtags relevantes. NUNCA más de 5.');
+    const perfilTexto=Object.entries({Nombre:perfil.nombre,Giro:perfil.giro,Años:perfil.anos,Ciudades:perfil.ciudades,Servicios:perfil.servicios,Precios:perfil.precios,Público:perfil.publico,'Propuesta de valor':perfil.valor,Tono:perfil.tono,Web:perfil.web,Contacto:perfil.contacto,Extra:perfil.extra}).filter(([,v])=>v).map(([k,v])=>`- ${k}: ${v}`).join('\n');
+
+    prompt=`Eres experto en marketing digital para negocios.\n\nNEGOCIO:\n${perfilTexto||'Negocio local.'}\n\nPERFIL: NEGOCIO — usa tono profesional orientado a clientes y ventas.\n\n${hashInstruccion}\n\n${tamanoInstruccion}\n\nFORMATO OBLIGATORIO: Separa cada idea u oración con doble salto de línea. NUNCA uses bloques de texto corrido sin saltos.\n\n${contexto?`TEMA: "${contexto}"`:'Genera contenido creativo basado en el perfil del negocio y la imagen.'}\n\nINSTRUCCIONES POR RED:\n${instrucciones}\n\nGenera también 5 canciones virales del momento relacionadas con el giro del negocio.\n\nResponde SOLO JSON sin markdown:\n{"textos":{${redes.map(r=>`"${r}":"texto"`).join(',')}},"canciones":[{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""}]}`;
+
+  } else {
+    // ── MODO PERSONAL ─────────────────────────────────────────
+    const pp=getPerfilPersonal();
+    const hashtagsPersonal=getHashtagsPersonal();
+    const tonoMap={divertido:'divertido y casual, con humor y naturalidad',reflexivo:'reflexivo e inspirador, con profundidad emocional',cotidiano:'cotidiano y cercano, como si hablaras con amigos',libre:'natural y auténtico, elige el tono según el contenido'};
+    const tonoDesc=tonoMap[pp.tono||'libre'];
+    const hashInstruccionP=hashtagsPersonal.length
+      ?`HASHTAGS: Usa máximo 5 de estos hashtags personales: ${hashtagsPersonal.join(' ')}. NUNCA más de 5.`
+      :'HASHTAGS: Usa máximo 5 hashtags personales relevantes y populares. NUNCA más de 5.';
+    const perfilPTexto=[pp.descripcion?`- Me describo como: ${pp.descripcion}`:'',pp.ciudad?`- Ciudad: ${pp.ciudad}`:'',pp.intereses?`- Intereses y temas: ${pp.intereses}`:''].filter(Boolean).join('\n');
+
+    prompt=`Eres experto en contenido para redes sociales personales.\n\nPERFIL PERSONAL:\n${perfilPTexto||'Persona con vida cotidiana.'}\n\nPERFIL: PERSONAL — el tono debe ser ${tonoDesc}. NO uses lenguaje corporativo ni de ventas. El contenido debe sentirse humano, auténtico y cercano.\n\n${hashInstruccionP}\n\n${tamanoInstruccion}\n\nFORMATO OBLIGATORIO: Separa cada idea con doble salto de línea. NUNCA uses bloques de texto corrido.\n\n${contexto?`TEMA: "${contexto}"`:'Genera contenido personal creativo basado en el perfil y la imagen.'}\n\nINSTRUCCIONES POR RED:\n${instrucciones}\n\nGenera también 5 canciones virales y populares del momento, apropiadas para una publicación personal cotidiana.\n\nResponde SOLO JSON sin markdown:\n{"textos":{${redes.map(r=>`"${r}":"texto"`).join(',')}},"canciones":[{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""}]}`;
+  }
 
   try{
-    const parts=[];if(imageBase64)parts.push({inline_data:{mime_type:imageType,data:imageBase64}});parts.push({text:prompt});
+    const parts=[];
+    if(imageBase64)parts.push({inline_data:{mime_type:imageType,data:imageBase64}});
+    parts.push({text:prompt});
     const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}]})});
     const data=await res.json();
     if(data.error)throw new Error(data.error.message||data.error);
     const resultado=JSON.parse((data.candidates?.[0]?.content?.parts?.[0]?.text||'{}').replace(/```json|```/g,'').trim());
-    const textos=resultado.textos||resultado;const panel=document.getElementById('rightPanel');panel.innerHTML='';
+    const textos=resultado.textos||resultado;
+    const panel=document.getElementById('rightPanel');panel.innerHTML='';
     redes.forEach((red,i)=>{if(textos[red])panel.appendChild(crearResultCard(red,textos[red],i*0.07));});
     if(resultado.canciones)mostrarCanciones(resultado.canciones);
   }catch(err){
@@ -622,8 +913,10 @@ async function generarTextos(){
   btn.disabled=false;btn.innerHTML='<i class="ti ti-wand"></i> Generar textos con IA';
 }
 
+// ── INIT ─────────────────────────────────────────────────────
 function init(){
   renderPantones();cargarPerfil();
+  actualizarSwitchUI(); // badge inicial
   try{
     const pt=localStorage.getItem('sp_pantone'),lg=localStorage.getItem('sp_logo'),vr=localStorage.getItem('sp_viral');
     if(pt)aplicarPantone(pt);
@@ -632,6 +925,7 @@ function init(){
   }catch(e){}
 }
 
+// Auto-login si ya hay usuario guardado
 try{
   const usuario=localStorage.getItem('owl_usuario');
   if(usuario){document.getElementById('regScreen').style.display='none';document.getElementById('appMain').style.display='block';init();}
