@@ -456,8 +456,7 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
 </div><!-- fin app-main -->
 
 <script>
-// API KEY GEMINI FIJA
-const GEMINI_KEY = 'AIzaSyCZisbe6-aYKi1lgp2YDkjf1MfW7Wt_5_c';
+// API KEY removida — vive en el servidor (Vercel env vars)
 
 const REDES={Facebook:{color:'#1877f2',url:'https://www.facebook.com',limite:63206,rec:400,emoji:true,tags:'2-3',tono:'conversacional y cercano, termina con pregunta para generar interacción'},Instagram:{color:'#e1306c',url:'https://www.instagram.com',limite:2200,rec:150,emoji:true,tags:'20-30',tono:'visual e inspirador, empieza con gancho, termina con call to action y bloque de hashtags separados'},TikTok:{color:'#555555',url:'https://www.tiktok.com',limite:2200,rec:100,emoji:true,tags:'5-8',tono:'energético, joven, directo, gancho en la primera línea'},X:{color:'#14171a',url:'https://www.x.com',limite:280,rec:250,emoji:false,tags:'1-2',tono:'conciso, impacto inmediato, sin relleno, máximo 280 caracteres'},LinkedIn:{color:'#0077b5',url:'https://www.linkedin.com',limite:3000,rec:600,emoji:false,tags:'3-5',tono:'profesional y reflexivo, aporta valor, termina con reflexión o pregunta profesional'}};
 
@@ -557,8 +556,8 @@ async function generarTextos(){
   const prompt=`Eres experto en marketing digital.\n\nNEGOCIO:\n${perfilTexto||'Negocio local.'}\n${hashInstruccion}\n\n${contexto?`TEMA: "${contexto}"`:'Genera contenido creativo basado en el perfil y la imagen.'}\n\nINSTRUCCIONES POR RED:\n${instrucciones}\n\nGenera también 5 canciones virales y pegajosas del momento para acompañar esta publicación.\n\nResponde SOLO JSON sin markdown:\n{"textos":{${redes.map(r=>`"${r}":"texto"`).join(',')}},"canciones":[{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""}]}`;
   try{
     const parts=[];if(imageBase64)parts.push({inline_data:{mime_type:imageType,data:imageBase64}});parts.push({text:prompt});
-    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_KEY}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}]})});
-    const data=await res.json();
+    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}]})});
+        const data=await res.json();
     if(data.error)throw new Error(data.error.message);
     const resultado=JSON.parse((data.candidates?.[0]?.content?.parts?.[0]?.text||'{}').replace(/```json|```/g,'').trim());
     const textos=resultado.textos||resultado;const panel=document.getElementById('rightPanel');panel.innerHTML='';
