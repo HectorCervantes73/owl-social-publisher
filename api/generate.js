@@ -18,7 +18,8 @@ export default async function handler(req, res) {
         body: JSON.stringify(body),
       }
     );
-    const data = await response.json();
+    const text = await response.text();
+    const data = JSON.parse(text);
     if (data.error) {
       return res.status(400).json({ error: data.error.message });
     }
