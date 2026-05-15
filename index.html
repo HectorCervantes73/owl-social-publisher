@@ -112,6 +112,12 @@ textarea.fi::placeholder,input.fi::placeholder{color:var(--text-muted);}
 .red-chip.active{border-color:var(--theme-accent);background:var(--theme-accent);color:var(--theme-btn-text);}
 .red-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
+/* NUEVO: Tamaño de textos */
+.tamano-wrap{display:grid;grid-template-columns:1fr;gap:6px;}
+.tamano-chip{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:500;transition:all 0.2s;user-select:none;border:1.5px solid var(--theme-border);color:var(--text-muted);background:var(--white);}
+.tamano-chip input{display:none;}
+.tamano-chip.active{border-color:var(--theme-accent);background:var(--theme-accent);color:var(--theme-btn-text);}
+
 .btn-main{width:100%;background:var(--theme-accent);color:var(--theme-btn-text);border:3px solid rgba(0,0,0,0.2);border-radius:var(--radius);padding:12px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s;letter-spacing:0.4px;text-shadow:0 1px 2px rgba(0,0,0,0.25);}
 .btn-main:hover{filter:brightness(0.88);transform:translateY(-1px);}
 .btn-main:disabled{opacity:0.5;cursor:not-allowed;transform:none;filter:none;}
@@ -211,7 +217,6 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
     <div class="reg-body">
       <div class="reg-title">Crear cuenta</div>
       <div class="reg-sub">Completa tu registro para comenzar</div>
-
       <div class="reg-field">
         <label>Nombre completo</label>
         <input type="text" id="reg-nombre" placeholder="Ej: Juan Pérez">
@@ -237,19 +242,15 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
           </label>
         </div>
       </div>
-
       <div class="trial-badge" id="trialBadge" style="display:none;">✓ Acceso completo por 15 días — sin costo ni tarjeta requerida</div>
-
       <div class="reg-divider">
         <div class="reg-divider-line"></div>
         <div class="reg-divider-text">o acceso rápido</div>
         <div class="reg-divider-line"></div>
       </div>
-
       <button class="btn-invitado" onclick="generarClave()">
         <i class="ti ti-user-check"></i> Soy Invitado — quiero 15 días de prueba
       </button>
-
       <div class="clave-box" id="claveBox">
         <div class="clave-label">Tu clave de acceso</div>
         <div class="clave-dots" id="claveDots">●●●●● ●●●●● ●●●●●</div>
@@ -262,11 +263,9 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
           <i class="ti ti-copy"></i> <span id="copyTxt">Copiar clave</span>
         </div>
       </div>
-
       <button class="btn-comenzar" onclick="entrarApp()">
         <i class="ti ti-rocket"></i> Comenzar ahora
       </button>
-
       <div class="ya-cuenta">¿Ya tienes cuenta? <a onclick="entrarApp()">Inicia sesión</a></div>
     </div>
   </div>
@@ -299,6 +298,7 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
 <div class="section active" id="sec-publicar">
   <div class="pub-grid">
     <div>
+      <!-- IMAGEN -->
       <div class="card">
         <div class="card-hdr"><i class="ti ti-photo"></i> Imagen</div>
         <div class="card-body">
@@ -312,6 +312,26 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
           <button onclick="resetImg()" id="btnResetImg" style="display:none;width:100%;border:1px solid var(--theme-border);background:white;border-radius:7px;padding:6px;font-size:11px;color:var(--text-muted);cursor:pointer;font-family:'Outfit',sans-serif;"><i class="ti ti-refresh"></i> Cambiar imagen</button>
         </div>
       </div>
+
+      <!-- NUEVO: TAMAÑO DE TEXTOS -->
+      <div class="card">
+        <div class="card-hdr"><i class="ti ti-text-size"></i> Tamaño de tus textos</div>
+        <div class="card-body">
+          <div class="tamano-wrap">
+            <label class="tamano-chip" id="chip-maximo" onclick="selTamano('maximo')">
+              <input type="radio" name="tamano" value="maximo"> 📝 Ocupa lo máximo permitido
+            </label>
+            <label class="tamano-chip active" id="chip-medio" onclick="selTamano('medio')">
+              <input type="radio" name="tamano" value="medio" checked> ✂️ Textos medios
+            </label>
+            <label class="tamano-chip" id="chip-corto" onclick="selTamano('corto')">
+              <input type="radio" name="tamano" value="corto"> ⚡ Textos cortos y concretos
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- IDEA -->
       <div class="card">
         <div class="card-hdr"><i class="ti ti-bulb"></i> ¿Alguna idea para hoy?</div>
         <div class="card-body">
@@ -321,15 +341,17 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
           </div>
         </div>
       </div>
+
+      <!-- REDES: desactivadas por default -->
       <div class="card">
         <div class="card-hdr"><i class="ti ti-share"></i> Redes sociales</div>
         <div class="card-body">
           <div class="redes-wrap" id="redesGrid">
-            <label class="red-chip active"><input type="checkbox" value="Facebook" checked onchange="toggleRed(this)"><div class="red-dot" style="background:#1877f2"></div> Facebook</label>
-            <label class="red-chip active"><input type="checkbox" value="Instagram" checked onchange="toggleRed(this)"><div class="red-dot" style="background:#e1306c"></div> Instagram</label>
-            <label class="red-chip active"><input type="checkbox" value="TikTok" checked onchange="toggleRed(this)"><div class="red-dot" style="background:#555"></div> TikTok</label>
-            <label class="red-chip active"><input type="checkbox" value="X" checked onchange="toggleRed(this)"><div class="red-dot" style="background:#14171a"></div> X / Twitter</label>
-            <label class="red-chip active" style="grid-column:1/-1"><input type="checkbox" value="LinkedIn" checked onchange="toggleRed(this)"><div class="red-dot" style="background:#0077b5"></div> LinkedIn</label>
+            <label class="red-chip"><input type="checkbox" value="Facebook" onchange="toggleRed(this)"><div class="red-dot" style="background:#1877f2"></div> Facebook</label>
+            <label class="red-chip"><input type="checkbox" value="Instagram" onchange="toggleRed(this)"><div class="red-dot" style="background:#e1306c"></div> Instagram</label>
+            <label class="red-chip"><input type="checkbox" value="TikTok" onchange="toggleRed(this)"><div class="red-dot" style="background:#555"></div> TikTok</label>
+            <label class="red-chip"><input type="checkbox" value="X" onchange="toggleRed(this)"><div class="red-dot" style="background:#14171a"></div> X / Twitter</label>
+            <label class="red-chip" style="grid-column:1/-1"><input type="checkbox" value="LinkedIn" onchange="toggleRed(this)"><div class="red-dot" style="background:#0077b5"></div> LinkedIn</label>
           </div>
           <button class="btn-main" id="btnGenerar" onclick="generarTextos()">
             <i class="ti ti-wand"></i> Generar textos con IA
@@ -337,6 +359,7 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
         </div>
       </div>
     </div>
+
     <div>
       <div class="songs-card">
         <div class="songs-title"><i class="ti ti-music"></i> 5 canciones recomendadas para tu publicación</div>
@@ -404,7 +427,7 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
 
       <div class="hashtag-block">
         <div class="hashtag-block-title"><i class="ti ti-hash"></i> # que no deben faltar</div>
-        <div class="hashtag-block-note">La IA seleccionará los más indicados según la red social y el tamaño del texto</div>
+        <div class="hashtag-block-note">Máximo 5 hashtags por publicación. En modo viral usa los 5 más virales del momento.</div>
         <div class="hashtag-inputs">
           <input class="hashtag-input" id="ht-1" placeholder="#belleza" oninput="formatHash(this)">
           <input class="hashtag-input" id="ht-2" placeholder="#style" oninput="formatHash(this)">
@@ -443,10 +466,10 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
         <div>✅ IA activa y lista para usar</div>
         <div>✅ Generación de textos por red social</div>
         <div>✅ Recomendación de canciones virales</div>
-        <div>✅ Hashtags automáticos</div>
+        <div>✅ Máximo 5 hashtags por publicación</div>
       </div>
       <div style="margin-top:16px;padding:12px;background:var(--theme-pale);border-radius:var(--radius);font-size:11px;color:var(--text-mid);">
-        <strong>Versión:</strong> OWL Social Publisher v1.0<br>
+        <strong>Versión:</strong> OWL Social Publisher v1.1<br>
         <strong>Desarrollado por:</strong> OWL Tech
       </div>
     </div>
@@ -458,7 +481,13 @@ textarea.result-ta:focus{border-color:var(--theme-accent);background:white;}
 <script>
 // API KEY removida — vive en el servidor (Vercel env vars)
 
-const REDES={Facebook:{color:'#1877f2',url:'https://www.facebook.com',limite:63206,rec:400,emoji:true,tags:'2-3',tono:'conversacional y cercano, termina con pregunta para generar interacción'},Instagram:{color:'#e1306c',url:'https://www.instagram.com',limite:2200,rec:150,emoji:true,tags:'20-30',tono:'visual e inspirador, empieza con gancho, termina con call to action y bloque de hashtags separados'},TikTok:{color:'#555555',url:'https://www.tiktok.com',limite:2200,rec:100,emoji:true,tags:'5-8',tono:'energético, joven, directo, gancho en la primera línea'},X:{color:'#14171a',url:'https://www.x.com',limite:280,rec:250,emoji:false,tags:'1-2',tono:'conciso, impacto inmediato, sin relleno, máximo 280 caracteres'},LinkedIn:{color:'#0077b5',url:'https://www.linkedin.com',limite:3000,rec:600,emoji:false,tags:'3-5',tono:'profesional y reflexivo, aporta valor, termina con reflexión o pregunta profesional'}};
+const REDES={
+  Facebook:{color:'#1877f2',url:'https://www.facebook.com',limite:63206,rec:400,emoji:true,tono:'conversacional y cercano, termina con pregunta para generar interacción. Separa cada idea con salto de línea doble.'},
+  Instagram:{color:'#e1306c',url:'https://www.instagram.com',limite:2200,rec:150,emoji:true,tono:'visual e inspirador, empieza con gancho, termina con call to action. Separa cada idea con salto de línea doble. Hashtags al final en bloque separado.'},
+  TikTok:{color:'#555555',url:'https://www.tiktok.com',limite:2200,rec:100,emoji:true,tono:'energético, joven, directo, gancho en la primera línea. Separa cada idea con salto de línea doble.'},
+  X:{color:'#14171a',url:'https://www.x.com',limite:280,rec:250,emoji:false,tono:'conciso, impacto inmediato, sin relleno, máximo 280 caracteres. Una idea por línea.'},
+  LinkedIn:{color:'#0077b5',url:'https://www.linkedin.com',limite:3000,rec:600,emoji:false,tono:'profesional y reflexivo, aporta valor. Separa cada párrafo con salto de línea doble. Termina con pregunta profesional.'}
+};
 
 const PANTONES=[
   {id:'institucional',label:'Institucional',colors:['#0f2a5e','#e8621a','#3b6cb7','#e8f0fb'],vars:{primary:'#0f2a5e',accent:'#e8621a',bg:'#f0f4fb',pale:'#e8f0fb',clientText:'#f9a87a',border:'#dde4f0',btnText:'#ffffff'}},
@@ -471,7 +500,6 @@ const PANTONES=[
 let imageBase64=null,imageType='image/jpeg',textosPorRed={},pantoneActivo='institucional';
 let claveGenerada='',claveVisible=false,memSeleccionada='anual';
 
-// REGISTRO
 function soloNums(input){input.value=input.value.replace(/\D/g,'');}
 function selMem(tipo){memSeleccionada=tipo;document.getElementById('chip-anual').classList.toggle('active',tipo==='anual');document.getElementById('chip-prueba').classList.toggle('active',tipo==='prueba');document.getElementById('trialBadge').style.display=tipo==='prueba'?'block':'none';}
 
@@ -511,7 +539,17 @@ function entrarApp(){
   init();
 }
 
-// APP
+// TAMAÑO DE TEXTOS
+function selTamano(v){
+  ['maximo','medio','corto'].forEach(x=>document.getElementById('chip-'+x).classList.remove('active'));
+  document.getElementById('chip-'+v).classList.add('active');
+}
+function getTamanoInstruccion(){
+  if(document.getElementById('chip-maximo').classList.contains('active'))return'LONGITUD: Usa el máximo de caracteres permitido para cada red. Textos largos y completos.';
+  if(document.getElementById('chip-corto').classList.contains('active'))return'LONGITUD: Textos muy cortos y directos. Ve al punto. Máximo la mitad del límite recomendado.';
+  return'LONGITUD: Textos de longitud media. Cerca del límite recomendado de cada red.';
+}
+
 function renderPantones(){document.getElementById('pantonesGrid').innerHTML=PANTONES.map(p=>`<div class="pantone-card ${p.id===pantoneActivo?'selected':''}" onclick="aplicarPantone('${p.id}')"><div class="pantone-preview" style="background:${p.vars.primary}">${p.colors.map(c=>`<div class="pantone-dot" style="background:${c}"></div>`).join('')}</div><div class="pantone-label">${p.label}</div></div>`).join('');}
 
 function aplicarPantone(id){pantoneActivo=id;const p=PANTONES.find(x=>x.id===id);if(!p)return;const r=document.documentElement.style;r.setProperty('--theme-primary',p.vars.primary);r.setProperty('--theme-accent',p.vars.accent);r.setProperty('--theme-bg',p.vars.bg);r.setProperty('--theme-pale',p.vars.pale);r.setProperty('--theme-client-text',p.vars.clientText);r.setProperty('--theme-border',p.vars.border);r.setProperty('--theme-btn-text',p.vars.btnText);document.body.style.background=p.vars.bg;renderPantones();try{localStorage.setItem('sp_pantone',id);}catch(e){}}
@@ -550,15 +588,29 @@ async function generarTextos(){
   if(!redes.length){alert('Selecciona al menos una red social.');return;}
   const btn=document.getElementById('btnGenerar');btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Generando...';textosPorRed={};mostrarLoading(redes);
   const viralMode=isViralMode(),hashtags=getHashtags();
-  const hashInstruccion=viralMode?'MODO VIRAL: ignora hashtags del negocio y usa exclusivamente los más virales y trending ahora según giro, imagen y contenido.':(hashtags.length?`Hashtags del negocio a incluir selectivamente: ${hashtags.join(' ')}`:'');
+
+  // CAMBIO 4: Máximo 5 hashtags
+  const hashInstruccion=viralMode
+    ?'HASHTAGS: Usa EXACTAMENTE 5 hashtags, los más virales del momento. NUNCA más de 5.'
+    :(hashtags.length
+      ?`HASHTAGS: Incluye máximo 5 de estos hashtags del negocio: ${hashtags.join(' ')}. NUNCA más de 5 en total.`
+      :'HASHTAGS: Usa máximo 5 hashtags relevantes. NUNCA más de 5.');
+
+  // CAMBIO 2: Tamaño de textos
+  const tamanoInstruccion=getTamanoInstruccion();
+
   const perfilTexto=Object.entries({Nombre:perfil.nombre,Giro:perfil.giro,Años:perfil.anos,Ciudades:perfil.ciudades,Servicios:perfil.servicios,Precios:perfil.precios,Público:perfil.publico,'Propuesta de valor':perfil.valor,Tono:perfil.tono,Web:perfil.web,Contacto:perfil.contacto,Extra:perfil.extra}).filter(([,v])=>v).map(([k,v])=>`- ${k}: ${v}`).join('\n');
-  const instrucciones=redes.map(r=>{const c=REDES[r];return`**${r}**: ${c.tono}. Hashtags: ${c.tags}. ${c.emoji?'Usa emoticones apropiados.':'Sin emoticones.'} Máx recomendado: ${c.rec} chars.`;}).join('\n');
-  const prompt=`Eres experto en marketing digital.\n\nNEGOCIO:\n${perfilTexto||'Negocio local.'}\n${hashInstruccion}\n\n${contexto?`TEMA: "${contexto}"`:'Genera contenido creativo basado en el perfil y la imagen.'}\n\nINSTRUCCIONES POR RED:\n${instrucciones}\n\nGenera también 5 canciones virales y pegajosas del momento para acompañar esta publicación.\n\nResponde SOLO JSON sin markdown:\n{"textos":{${redes.map(r=>`"${r}":"texto"`).join(',')}},"canciones":[{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""}]}`;
+
+  const instrucciones=redes.map(r=>{const c=REDES[r];return`**${r}**: ${c.tono}. ${c.emoji?'Usa emoticones apropiados.':'Sin emoticones.'} Máx recomendado: ${REDES[r].rec} chars.`;}).join('\n');
+
+  // CAMBIO 1: Saltos de línea obligatorios + tamaño
+  const prompt=`Eres experto en marketing digital.\n\nNEGOCIO:\n${perfilTexto||'Negocio local.'}\n\n${hashInstruccion}\n\n${tamanoInstruccion}\n\nFORMATO OBLIGATORIO: Separa cada idea u oración con doble salto de línea. NUNCA uses bloques de texto corrido sin saltos.\n\n${contexto?`TEMA: "${contexto}"`:'Genera contenido creativo basado en el perfil y la imagen.'}\n\nINSTRUCCIONES POR RED:\n${instrucciones}\n\nGenera también 5 canciones virales y pegajosas del momento para acompañar esta publicación.\n\nResponde SOLO JSON sin markdown:\n{"textos":{${redes.map(r=>`"${r}":"texto"`).join(',')}},"canciones":[{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""},{"cancion":"","artista":"","vibe":""}]}`;
+
   try{
     const parts=[];if(imageBase64)parts.push({inline_data:{mime_type:imageType,data:imageBase64}});parts.push({text:prompt});
     const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}]})});
-        const data=await res.json();
-    if(data.error)throw new Error(data.error.message);
+    const data=await res.json();
+    if(data.error)throw new Error(data.error.message||data.error);
     const resultado=JSON.parse((data.candidates?.[0]?.content?.parts?.[0]?.text||'{}').replace(/```json|```/g,'').trim());
     const textos=resultado.textos||resultado;const panel=document.getElementById('rightPanel');panel.innerHTML='';
     redes.forEach((red,i)=>{if(textos[red])panel.appendChild(crearResultCard(red,textos[red],i*0.07));});
@@ -580,7 +632,6 @@ function init(){
   }catch(e){}
 }
 
-// Verificar si ya está registrado
 try{
   const usuario=localStorage.getItem('owl_usuario');
   if(usuario){document.getElementById('regScreen').style.display='none';document.getElementById('appMain').style.display='block';init();}
